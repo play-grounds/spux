@@ -205,7 +205,7 @@
               value=${'Now ' +
                 Math.floor((this.state.amount % 360) / 30) +
                 '.' +
-                (this.state.hour % 30) / 5}
+                Math.round((this.state.amount % 30) / 5)}
             />
             <input
               type="button"
