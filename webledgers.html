@@ -1,0 +1,206 @@
+<link rel="stylesheet" href="https://spux.org/css/spuxblue.css" />
+<script
+  type="application/ld+json"
+  id="data"
+  src="https://melvin.solid.live/credit/count.ttl"
+>
+  [{"@id":"https://melvincarvalho.com/#me","https://w3id.org/cc#amount":[{"@value":"0","@type":"http://www.w3.org/2001/XMLSchema#integer"}],"urn:query:day":[{"@value":"0","@type":"http://www.w3.org/2001/XMLSchema#integer"}],"urn:query:hour":[{"@value":"0","@type":"http://www.w3.org/2001/XMLSchema#integer"}]}]
+</script>
+<script
+  type="application/json"
+  id="week"
+  src="https://melvin.solid.live/credit/week.json"
+>
+  []
+</script>
+<script type="module">
+  import 'https://unpkg.com/dataisland?module'
+  import { Component, h, html, render } from 'https://unpkg.com/spux?module'
+  import Circle from './Circle.js'
+
+  var id = 'data'
+
+  class App extends Component {
+    constructor (props) {
+      super(props)
+      this.state = {
+        amount: props.amount,
+        hour: props.hour
+      }
+    }
+
+    componentDidMount () {
+      id = 'data'
+      var that = this
+      // Select the node that will be observed for mutations
+      const targetNode = document.getElementById(id)
+
+      // Options for the observer (which mutations to observe)
+      const config = {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        characterData: true
+      }
+
+      // Callback function to execute when mutations are observed
+      const callback = function (mutationsList, observer) {
+        // Use traditional 'for loops' for IE 11
+        for (let mutation of mutationsList) {
+          console.log('mutation', mutation)
+          var week = new Array(7).fill(0).map(() => new Array(24).fill(0))
+          for (let i = 0; i < di.week.length / 3; i++) {
+            let el = { hour: di.week[i * 3 + 1], day: di.week[i * 3 + 2] - 1 }
+            console.log(el)
+            week[el.day][el.hour] = di.week[i * 3]
+          }
+          console.log('week', week)
+          if (mutation.type === 'characterData') {
+            that.setState({
+              amount: di[id][0]['urn:query:day'][0]['@value'],
+              week: week
+            })
+          }
+        }
+      }
+
+      // Create an observer instance linked to the callback function
+      const observer = new MutationObserver(callback)
+
+      // Start observing the target node for configured mutations
+      observer.observe(targetNode, config)
+    }
+
+    render () {
+      const Row = props => {
+        return html`
+          <div>
+            ${props.arr
+              ? props.arr[props.row].map(
+                  (i, j) =>
+                    html`
+                      <${Dot} amount="${i}" hour="${j}" />
+                    `
+                )
+              : ''}
+            <${Dot} />
+          </div>
+        `
+      }
+
+      const Dot = props => {
+        var amount = Math.floor(props.amount / 50)
+        if (amount > 9) amount = 9
+        var red = Math.floor((amount * 255) / 9)
+        return html`
+          <svg height="20" width="20">
+            <circle
+              cx="10"
+              cy="10"
+              r="${amount}"
+              stroke="black"
+              stroke-width="0"
+              fill="rgb(${red},${255 - red}, 0)"
+            >
+              <title>${props.hour}</title>
+            </circle>
+            ${props.hour === new Date().getUTCHours()
+              ? html`
+                  <rect
+                    width="20"
+                    height="20"
+                    style="stroke:yellow;stroke-width:1;fill-opacity:0.01;stroke-opacity:0.9"
+                  >
+                    <title>${props.hour}</title>
+                  </rect>
+                `
+              : ''}
+          </svg>
+        `
+      }
+
+      return html`
+        <h1>Webledgers</h1>
+        <hr />
+        <input
+          type="button"
+          class="card btn primary"
+          value=${'Day ' + this.state.amount}
+        />
+        <hr />
+        <div class="row">
+          <div class="col 4">
+            <${Circle}
+              amount="${this.state.amount % 360}"
+              hour="${this.state.hour}"
+            />
+          </div>
+          <div class="col vc">
+            <${Row} arr=${this.state.week} row="0" />
+            <${Row} arr=${this.state.week} row="1" />
+            <${Row} arr=${this.state.week} row="2" />
+            <${Row} arr=${this.state.week} row="3" />
+            <${Row} arr=${this.state.week} row="4" />
+            <${Row} arr=${this.state.week} row="5" />
+            <${Row} arr=${this.state.week} row="6" />
+          </div>
+        </div>
+        <hr />
+      `
+    }
+  }
+
+  // UPDATES
+  function subscribe (id) {
+    var el = document.getElementById(id)
+    var src = el.src
+    function fetchSrc () {
+      window
+        .fetch(el.src, { headers: { Accept: el.type } })
+        .then(response => response.json())
+        .then(json => {
+          if (
+            di[id] &&
+            json &&
+            JSON.stringify(di[id]) !== JSON.stringify(json)
+          ) {
+            console.log('updating di.' + id)
+            di[id] = json
+          }
+        })
+    }
+
+    fetchSrc()
+    let uri = location.href
+    let wss = uri.replace('http', 'ws')
+    let w = new WebSocket('wss://melvin.solid.live/')
+    w.onmessage = function (m) {
+      let data = m.data
+      console.log(data)
+
+      if (data.match(/pub .*/)) {
+        fetchSrc()
+      }
+    }
+    w.onopen = function () {
+      console.log('websocket open')
+      w.send('sub ' + src)
+    }
+    w.onerror = function () {
+      console.log('websocket error')
+    }
+    w.onclose = function () {
+      console.log('websocket closed')
+    }
+  }
+
+  function renderApp () {
+    subscribe('data')
+    subscribe('week')
+    var day = di[id][0]['urn:query:day'][0]['@value']
+    console.log('rendering', day)
+    render(h(App, { amount: day, hour: day }), document.body)
+  }
+
+  renderApp()
+</script>
