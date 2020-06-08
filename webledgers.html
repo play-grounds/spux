@@ -170,8 +170,15 @@
           }
 
           return html`
-            <h4>Webledgers</h4>
+            <div id="navbar" style="margin-top: -10px; margin-bottom: -10px;">
+              <div class="bg-success pv2 row">
+                <div class="col">
+                  <a href="#buttons" class="white ph2 bold">Webledgers</a>
+                </div>
+              </div>
+            </div>
             <hr />
+
             <div class="row">
               <div class="col 1">
                 <${Circle}
@@ -199,24 +206,27 @@
               </div>
             </div>
             <hr />
-            <input
-              type="button"
-              class="card btn bg-info white"
-              value=${'Now ' +
-                Math.floor((this.state.amount % 360) / 30) +
-                '.' +
-                Math.round((this.state.amount % 30) / 5)}
-            />
-            <input
-              type="button"
-              class="card btn bg-accent white"
-              value=${'Day ' + this.state.amount}
-            />
-            <input
-              type="button"
-              class="card btn bg-success white"
-              value=${'Hour ' + this.state.hour}
-            />
+            <div class="row ph2 mh4">
+              <input
+                type="button"
+                class="card pill btn bg-info white bold"
+                value=${'Now ' +
+                  Math.floor((this.state.amount % 360) / 30) +
+                  '.' +
+                  Math.round((this.state.amount % 30) / 5)}
+              />
+              <input
+                type="button"
+                class="card pill btn white bold"
+                style="background-color: green; margin: 0px"
+                value=${'Day ' + this.state.amount}
+              />
+              <input
+                type="button"
+                class="card pill btn bg-success white bold"
+                value=${'Hour ' + this.state.hour}
+              />
+            </div>
             <hr />
           `
         }

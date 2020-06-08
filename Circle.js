@@ -49,9 +49,9 @@ class OuterCircle extends Component {
         stroke-dashoffset="1100"
         stroke-dasharray="1100"
         stroke="${'rgb(' +
-          ((this.props.hour % 410) * 255) / 410.0 +
+          (this.props.hour * 255) / 410.0 +
           ', ' +
-          ((410 - (this.props.hour % 410)) * 255) / 410.0 +
+          ((410 - this.props.hour) * 255) / 410.0 +
           ', 0)'}"
         transform="rotate(-90 175 175)"
         fill="none"
