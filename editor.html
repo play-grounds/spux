@@ -1,6 +1,8 @@
 <html>
   <head>
-    <script type="application/json" id="data">"<div><b><u><i>Edit me! editing here....</i></u></b></div><div><b><u><i><br></i></u></b></div><div><i>View Source to see <b>Data Island</b><br></i><u><i></i></u><b><u><i></i></u></b></div><div><i><b><br></b></i></div><div><i><b>It works!!!</b></i></div><div><i><b><br></b></i></div><div><i><b>it sure does.!</b></i></div>"</script>
+    <script type="application/json" id="data">
+      "<h1><b><u><i>Welcome to Editor!</i></u></b></h1><div><i><b><br></b></i></div><div><img src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4dd.png\"></div><div><br></div><div>Type your text here, and hit <b><u>S</u></b> to save on a <i>WebDAV</i> enabled server.</div><div><br></div><div><i>Enjoy!</i></div>"
+    </script>
   </head>
 </html>
 
@@ -23,7 +25,6 @@
           /(<script[^>]*type="application[^>]*>)([\s\S]*?)(<\/script>)/gim,
           '$1' + JSON.stringify(di[id], null, 2) + '$3'
         )
-        console.log('updating', newhtml, html)
         if (newhtml !== html) {
           fetch(location.href, {
             method: 'PUT',
@@ -39,6 +40,10 @@
 
   // Initialize pell on an HTMLElement
   var editor = pell.init({
+    methods: {
+      ensureHTTP: str => (/^https?:\/\//.test(str) && str) || `http://${str}`
+    },
+
     // <HTMLElement>, required
     element: document.body,
 
@@ -65,16 +70,40 @@
     // Specify the actions you specifically want (in order)
     actions: [
       'bold',
+      'italic',
+      'underline',
+      'strikethrough',
+      'heading1',
+      'heading2',
+      'paragraph',
+      'quote',
+      'olist',
+      'ulist',
+      'code',
+      'line',
       {
-        name: 'custom',
+        name: 'image',
+        result: () => {
+          const url = window.prompt('Enter the image URL')
+          if (url) pell.exec('insertImage', url)
+        }
+      },
+      {
+        name: 'link',
+        result: () => {
+          const url = window.prompt('Enter the link URL')
+          if (url) pell.exec('createLink', url)
+        }
+      },
+      {
+        name: 'save',
         icon: 'S',
         title: 'Save',
         result: () => {
           console.log('Save!')
           updateThis('data')
         }
-      },
-      'underline'
+      }
     ],
 
     // classes<Array[string]> (optional)
@@ -94,4 +123,3 @@
   // this is just `document.execCommand(command, false, value)`
   //   pell.exec(command<string>, value<string>)
 </script>
-
