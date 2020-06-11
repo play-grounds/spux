@@ -1,8 +1,6 @@
 <html>
   <head>
-    <script type="application/json" id="data">
-      "<div><b><u><i>Edit me!</i></u></b></div><div><b><u><i><br></i></u></b></div><div><i>View Source to see <b>Data Island</b><br></i><u><i></i></u><b><u><i></i></u></b></div>"
-    </script>
+    <script type="application/json" id="data">"<div><b><u><i>Edit me! editing here....</i></u></b></div><div><b><u><i><br></i></u></b></div><div><i>View Source to see <b>Data Island</b><br></i><u><i></i></u><b><u><i></i></u></b></div><div><i><b><br></b></i></div><div><i><b>It works!!!</b></i></div><div><i><b><br></b></i></div><div><i><b>it sure does.!</b></i></div>"</script>
   </head>
 </html>
 
@@ -16,6 +14,28 @@
 
 <script type="module">
   import 'https://unpkg.com/dataisland?module'
+  var id = 'data'
+
+  function updateThis (id) {
+    fetch(location.href).then(response =>
+      response.text().then(html => {
+        var newhtml = html.replace(
+          /(<script[^>]*type="application[^>]*>)([\s\S]*?)(<\/script>)/gim,
+          '$1' + JSON.stringify(di[id], null, 2) + '$3'
+        )
+        console.log('updating', newhtml, html)
+        if (newhtml !== html) {
+          fetch(location.href, {
+            method: 'PUT',
+            body: newhtml,
+            headers: {
+              'content-type': 'text/html'
+            }
+          }).then(console.log)
+        }
+      })
+    )
+  }
 
   // Initialize pell on an HTMLElement
   var editor = pell.init({
@@ -24,7 +44,10 @@
 
     // <Function>, required
     // Use the output html, triggered by element's `oninput` event
-    onChange: html => console.log(html),
+    onChange: html => {
+      console.log(html)
+      di.data = html
+    },
 
     // <string>, optional, default = 'div'
     // Instructs the editor which element to inject via the return key
@@ -44,9 +67,12 @@
       'bold',
       {
         name: 'custom',
-        icon: 'C',
-        title: 'Custom Action',
-        result: () => console.log('Do something!')
+        icon: 'S',
+        title: 'Save',
+        result: () => {
+          console.log('Save!')
+          updateThis('data')
+        }
       },
       'underline'
     ],
@@ -68,3 +94,4 @@
   // this is just `document.execCommand(command, false, value)`
   //   pell.exec(command<string>, value<string>)
 </script>
+
