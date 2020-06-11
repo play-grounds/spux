@@ -1,21 +1,20 @@
 <html>
   <head>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://unpkg.com/pell/dist/pell.min.css"
+    />
+
     <script type="application/json" id="data">
       "<h1><b><u><i>Welcome to Editor!</i></u></b></h1><div><i><b><br></b></i></div><div><img src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4dd.png\"></div><div><br></div><div>Type your text here, and hit <b><u>S</u></b> to save on a <i>WebDAV</i> enabled server.</div><div><br></div><div><i>Enjoy!</i></div>"
     </script>
   </head>
 </html>
 
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="https://unpkg.com/pell/dist/pell.min.css"
-/>
-
-<script src="https://unpkg.com/pell"></script>
-
 <script type="module">
   import 'https://unpkg.com/dataisland?module'
+  import { exec, init } from './web_modules/pell.js'
   var id = 'data'
 
   function updateThis (id) {
@@ -39,7 +38,7 @@
   }
 
   // Initialize pell on an HTMLElement
-  var editor = pell.init({
+  var editor = init({
     methods: {
       ensureHTTP: str => (/^https?:\/\//.test(str) && str) || `http://${str}`
     },
@@ -85,14 +84,14 @@
         name: 'image',
         result: () => {
           const url = window.prompt('Enter the image URL')
-          if (url) pell.exec('insertImage', url)
+          if (url) exec('insertImage', url)
         }
       },
       {
         name: 'link',
         result: () => {
           const url = window.prompt('Enter the link URL')
-          if (url) pell.exec('createLink', url)
+          if (url) exec('createLink', url)
         }
       },
       {
@@ -121,5 +120,5 @@
   // Execute a document command, see reference:
   // https://developer.mozilla.org/en/docs/Web/API/Document/execCommand
   // this is just `document.execCommand(command, false, value)`
-  //   pell.exec(command<string>, value<string>)
+  //   exec(command<string>, value<string>)
 </script>
