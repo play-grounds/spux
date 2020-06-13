@@ -17,31 +17,10 @@
       [180,23,1,445,22,1,135,21,1,20,17,1,30,16,1,385,15,1,285,13,1,715,12,1,425,11,1,410,10,1,745,9,1,525,8,1,160,7,1,800,6,1,175,5,1,15,23,2,90,22,2,390,21,2,510,20,2,625,19,2,730,18,2,195,17,2,100,16,2,725,15,2,595,14,2,360,13,2,75,12,2,440,11,2,415,10,2,455,9,2,565,8,2,20,7,2,25,23,3,155,22,3,480,21,3,205,20,3,305,19,3,255,18,3,10,15,3,115,14,3,65,13,3,655,12,3,560,11,3,125,10,3,305,9,3,635,8,3,485,7,3,15,6,3,10,22,4,130,21,4,590,20,4,360,19,4,110,18,4,695,17,4,500,16,4,155,15,4,125,14,4,55,13,4,120,12,4,160,11,4,250,10,4,740,9,4,560,8,4,590,7,4,35,6,4,80,22,5,25,21,5,155,20,5,10,19,5,15,18,5,15,17,5,15,13,5,245,12,5,245,11,5,290,10,5,345,9,5,230,8,5,30,7,5,5,6,5,20,22,6,85,21,6,25,20,6,15,19,6,430,18,6,15,17,6,160,16,6,410,15,6,585,14,6,385,13,6,40,12,6,210,11,6,630,10,6,590,9,6,670,8,6,345,7,6,35,6,6,5,3,6,385,22,7,570,21,7,410,20,7,210,19,7,510,18,7,245,17,7,120,16,7,20,14,7,45,13,7,445,12,7,260,11,7,310,10,7,410,9,7,525,8,7,315,7,7]
     </script>
     <script type="module">
-      ;(() => {
-        globalThis.di = new Proxy(
-          Array.from(
-            document.querySelectorAll(
-              '[type="application/ld+json"], [type="application/json"]'
-            )
-          )
-            .map(island => [island.id, JSON.parse(island.text)])
-            .reduce((obj, item) => {
-              obj[item[0]] = item[1]
-              return obj
-            }, {}),
-          {
-            set: (obj, prop, value) => {
-              obj[prop] = value
-              var island = document.getElementById(prop)
-              island.text = JSON.stringify(value, null, 2)
-              return true
-            }
-          }
-        )
-      })()
-
       import { Component, h, html, render } from 'https://unpkg.com/spux?module'
+      import './components/dior.js'
       import Circle from './Circle.js'
+      import Navbar from './components/navbar.js'
 
       var id = 'data'
 
@@ -89,6 +68,7 @@
                   hour: di[id][0]['urn:query:hour'][0]['@value'],
                   week: week
                 })
+                that.forceUpdate()
               }
             }
           }
@@ -101,37 +81,6 @@
         }
 
         render () {
-          const Row = props => {
-            if (!props.arr) return ''
-            return html`
-          <div>
-            <svg height="20" width="480">
-              ${props.arr[props.row].map(
-                (i, j) =>
-                  html`
-                    <${Dot2} amount="${i}" hour="${j}" />
-                  `
-              )}
-              <svg/>
-          </div>
-        `
-          }
-
-          const Dot2 = props => {
-            return html`
-              <circle
-                cx="${10 + 20 * props.hour}"
-                cy="10"
-                r="${amount}"
-                stroke="black"
-                stroke-width="0"
-                fill="rgb(${red},${255 - red}, 0)"
-              >
-                <title>${props.hour}</title>
-              </circle>
-            `
-          }
-
           const Dot = (i, j, row) => {
             var amount = Math.floor(i / 41)
             if (amount > 9) amount = 9
@@ -170,14 +119,7 @@
           }
 
           return html`
-            <div id="navbar" style="margin-top: -10px; margin-bottom: -10px;">
-              <div class="bg-success pv2 row">
-                <div class="col">
-                  <a href="#buttons" class="white ph2 bold">Webledgers</a>
-                </div>
-              </div>
-            </div>
-            <hr />
+            <${Navbar} title="Webledgers" />
 
             <div class="row">
               <div class="col 1">
