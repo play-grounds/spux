@@ -38,6 +38,7 @@
 
         componentDidMount () {
           handleMutation(id, this.processMutation)
+          handleMutation('week', this.processMutation)
         }
 
         processMutation () {
@@ -155,7 +156,7 @@
       // <${Row} arr=${this.state.week} row="0" /> //
 
       function renderApp () {
-        subscribe('data')
+        subscribe(id)
         subscribe('week')
         var day = di[id][0]['urn:query:day'][0]['@value']
         console.log('rendering', day)

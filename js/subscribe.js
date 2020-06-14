@@ -7,6 +7,7 @@ function subscribe (id) {
   var el = document.getElementById(id)
   var src = el.src
   function fetchSrc () {
+    console.log('fetching', src)
     window
       .fetch(el.src, { headers: { Accept: el.type } })
       .then(response => response.json())
