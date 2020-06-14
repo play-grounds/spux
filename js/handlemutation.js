@@ -17,7 +17,7 @@ function handleMutation (id, cb) {
     // Use traditional 'for loops' for IE 11
     for (let mutation of mutationsList) {
       console.log('mutation', mutation)
-      if (mutation.type === 'characterData') {
+      if (mutation.type === 'characterData' || mutation.type === 'childList') {
         cb()
       }
     }

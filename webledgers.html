@@ -56,9 +56,11 @@
             hour: di[id][0]['urn:query:hour'][0]['@value'],
             week: week
           })
+          this.forceUpdate()
         }
 
         render () {
+          console.log('rendering')
           const Dot = (i, j, row) => {
             var amount = Math.floor(i / 41)
             if (amount > 9) amount = 9
