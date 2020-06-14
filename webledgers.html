@@ -25,21 +25,21 @@
       import Dot from './components/Dot.js'
       import Navbar from './components/navbar.js'
 
-      var id = 'data'
+      var ids = ['data', 'week']
 
       class App extends Component {
         constructor (props) {
           super(props)
           this.state = {
-            amount: props.amount,
-            hour: props.hour
+            amount: props.amount || 0,
+            hour: props.hour || 0
           }
           this.processMutation = this.processMutation.bind(this)
         }
 
         componentDidMount () {
-          handleMutation(id, this.processMutation)
-          handleMutation('week', this.processMutation)
+          handleMutation(ids[0], this.processMutation)
+          handleMutation(ids[1], this.processMutation)
         }
 
         processMutation () {
@@ -54,8 +54,8 @@
           }
           console.log('week', week)
           this.setState({
-            amount: di[id][0]['urn:query:day'][0]['@value'],
-            hour: di[id][0]['urn:query:hour'][0]['@value'],
+            amount: di.data[0]['urn:query:day'][0]['@value'],
+            hour: di.data[0]['urn:query:hour'][0]['@value'],
             week: week
           })
         }
@@ -118,11 +118,9 @@
       }
 
       function main () {
-        subscribe(id)
-        subscribe('week')
-        var day = di[id][0]['urn:query:day'][0]['@value']
-        console.log('rendering', day)
-        render(h(App, { amount: day, hour: day }), document.body)
+        subscribe(ids[0])
+        subscribe(ids[1])
+        render(h(App), document.body)
       }
 
       main()
