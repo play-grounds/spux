@@ -26,7 +26,7 @@ function subscribe (id) {
     let data = m.data
     console.log(data)
 
-    if (data.match(/pub .*/)) {
+    if (data.match(/pub .*/) || data.match(/ack .*/)) {
       fetchSrc()
     }
   }
