@@ -19,6 +19,8 @@
     <script type="module">
       import { Component, h, html, render } from 'https://unpkg.com/spux?module'
       import './components/dior.js'
+      import subscribe from './js/subscribe.js'
+      import handleMutation from './js/handlemutation.js'
       import Circle from './Circle.js'
       import Navbar from './components/navbar.js'
 
@@ -31,53 +33,29 @@
             amount: props.amount,
             hour: props.hour
           }
+          this.processMutation = this.processMutation.bind(this)
         }
 
         componentDidMount () {
-          id = 'data'
-          var that = this
-          // Select the node that will be observed for mutations
-          const targetNode = document.getElementById(id)
+          handleMutation(id, this.processMutation)
+        }
 
-          // Options for the observer (which mutations to observe)
-          const config = {
-            attributes: true,
-            childList: true,
-            subtree: true,
-            characterData: true
-          }
-
-          // Callback function to execute when mutations are observed
-          const callback = function (mutationsList, observer) {
-            // Use traditional 'for loops' for IE 11
-            for (let mutation of mutationsList) {
-              console.log('mutation', mutation)
-              var week = new Array(7).fill(0).map(() => new Array(24).fill(0))
-              for (let i = 0; i < di.week.length / 3; i++) {
-                let el = {
-                  hour: di.week[i * 3 + 1],
-                  day: di.week[i * 3 + 2] - 1
-                }
-                // console.log(el)
-                week[el.day][el.hour] = di.week[i * 3]
-              }
-              console.log('week', week)
-              if (mutation.type === 'characterData') {
-                that.setState({
-                  amount: di[id][0]['urn:query:day'][0]['@value'],
-                  hour: di[id][0]['urn:query:hour'][0]['@value'],
-                  week: week
-                })
-                that.forceUpdate()
-              }
+        processMutation () {
+          var week = new Array(7).fill(0).map(() => new Array(24).fill(0))
+          for (let i = 0; i < di.week.length / 3; i++) {
+            let el = {
+              hour: di.week[i * 3 + 1],
+              day: di.week[i * 3 + 2] - 1
             }
+            // console.log(el)
+            week[el.day][el.hour] = di.week[i * 3]
           }
-
-          // Create an observer instance linked to the callback function
-          const observer = new MutationObserver(callback)
-
-          // Start observing the target node for configured mutations
-          observer.observe(targetNode, config)
+          console.log('week', week)
+          this.setState({
+            amount: di[id][0]['urn:query:day'][0]['@value'],
+            hour: di[id][0]['urn:query:hour'][0]['@value'],
+            week: week
+          })
         }
 
         render () {
@@ -174,50 +152,6 @@
         }
       }
       // <${Row} arr=${this.state.week} row="0" /> //
-
-      // UPDATES
-      function subscribe (id) {
-        var el = document.getElementById(id)
-        var src = el.src
-        function fetchSrc () {
-          window
-            .fetch(el.src, { headers: { Accept: el.type } })
-            .then(response => response.json())
-            .then(json => {
-              if (
-                di[id] &&
-                json &&
-                JSON.stringify(di[id]) !== JSON.stringify(json)
-              ) {
-                console.log('updating di.' + id)
-                di[id] = json
-              }
-            })
-        }
-
-        fetchSrc()
-        let uri = location.href
-        let wss = uri.replace('http', 'ws')
-        let w = new WebSocket('wss://melvin.solid.live/')
-        w.onmessage = function (m) {
-          let data = m.data
-          console.log(data)
-
-          if (data.match(/pub .*/)) {
-            fetchSrc()
-          }
-        }
-        w.onopen = function () {
-          console.log('websocket open')
-          w.send('sub ' + src)
-        }
-        w.onerror = function () {
-          console.log('websocket error')
-        }
-        w.onclose = function () {
-          console.log('websocket closed')
-        }
-      }
 
       function renderApp () {
         subscribe('data')
