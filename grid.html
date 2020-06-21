@@ -1,0 +1,30 @@
+<link
+  href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
+  rel="stylesheet"
+/>
+
+<script type="application/ld+json" id="data">
+  {
+    "@id": "#this",
+    "type": "Balance",
+    "source": "https://melvincarvalho.com/#me",
+    "amount": 320,
+    "currency": "satoshi"
+  }
+</script>
+<script type="module">
+  import 'https://unpkg.com/dior?module'
+
+  import Grid from 'https://jspm.dev/gridjs'
+
+  var columns = Object.keys(di.data)
+  var values = Object.values(di.data)
+
+  const grid = new Grid.Grid({
+    columns: columns,
+    data: [values]
+  }).render(document.getElementById('wrapper'))
+</script>
+<body>
+  <div id="wrapper"></div>
+</body>
