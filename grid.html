@@ -32,7 +32,9 @@
   const grid = new Grid.Grid({
     columns: columns,
     data: values,
-    pagination: true
+    pagination: true,
+    sort: true,
+    search: true
   }).render(document.getElementById('wrapper'))
 
   console.table(di.data)
