@@ -6,14 +6,14 @@
 <script type="application/ld+json" id="data">
   [
     {
-      "@id": "#this",
+      "@id": "#1",
       "type": "Balance",
       "source": "https://melvincarvalho.com/#me",
       "amount": 320,
       "currency": "satoshi"
     },
     {
-      "@id": "#this",
+      "@id": "#2",
       "type": "Balance",
       "source": "https://spuxbot.com/web#id",
       "amount": 680,
@@ -22,7 +22,7 @@
   ]
 </script>
 <script type="module">
-  import 'https://unpkg.com/dior?module'
+  import 'https://jspm.dev/dior'
 
   import Grid from 'https://jspm.dev/gridjs'
 
@@ -33,7 +33,10 @@
     columns: columns,
     data: values
   }).render(document.getElementById('wrapper'))
+
+  console.table(di.data)
 </script>
+
 <body>
   <div id="wrapper"></div>
 </body>
