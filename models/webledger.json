@@ -1,0 +1,7 @@
+{
+  "@id": "#this",
+  "type": "Balance",
+  "amount": 320,
+  "currency": "satoshi",
+  "source": "https://melvincarvalho.com/#me"
+}
