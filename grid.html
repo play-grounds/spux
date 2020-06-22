@@ -31,7 +31,8 @@
 
   const grid = new Grid.Grid({
     columns: columns,
-    data: values
+    data: values,
+    pagination: true
   }).render(document.getElementById('wrapper'))
 
   console.table(di.data)
