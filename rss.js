@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
+var Feed = require('rss-to-json')
 
-var Feed = require('rss-to-json');
- 
-Feed.load('https://morioh.com/feed', function(err, rss){
-    console.log(JSON.stringify(rss, null, 3));
-});
- 
+var uri = process.argv[2] || 'https://morioh.com/feed'
+
+Feed.load(uri, function (err, rss) {
+  console.log(JSON.stringify(rss, null, 3))
+})
