@@ -1,0 +1,27 @@
+{
+  "name": "playgrounds-spux",
+  "version": "0.0.1",
+  "description": "spux playground",
+  "main": "rss.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/play-grounds/spux.git"
+  },
+  "author": "Melvin Carvalho",
+  "bugs": {
+    "url": "https://github.com/play-grounds/spux/issues"
+  },
+  "snowpack": {
+    "webDependencies": [
+      "preact-mdl"
+    ]
+  },
+  "homepage": "https://github.com/play-grounds/spux#readme",
+  "dependencies": {
+    "preact": "^10.4.4",
+    "preact-mdl": "^2.2.2"
+  }
+}
