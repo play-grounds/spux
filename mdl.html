@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html style="height: 100%; width: 100%;">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+      rel="stylesheet"
+      href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css"
+    />
+    <title>Preact-mdl Example</title>
+  </head>
+  <body style="height: 100%; width: 100%;">
+    <script type="module">
+      import { h, html, Component, render } from 'https://unpkg.com/spux?module'
+      import mdl from 'https://jspm.dev/material-design-lite/material'
+      import Components from './web_modules/preact-mdl.js'
+
+      console.log(Components.Button)
+      const Button = Components.Button
+      const Icon = Components.Icon
+
+      render(
+        html`
+          <div>
+            <${Button}
+              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+              >I am button!
+            <//>
+          </div>
+        `,
+        document.body
+      )
+    </script>
+  </body>
+</html>
