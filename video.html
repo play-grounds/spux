@@ -1,35 +1,4 @@
-<html>
-  <head>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/plyr@3/dist/plyr.css"
-      defer
-    />
-
-    <script type="application/ld+json" id="data">
-      { "youtubeid": "m3jNb7IdJHQ" }
-    </script>
-    <script type="module">
-      import 'https://jspm.dev/dior'
-      import { h, html, render, Component } from 'https://unpkg.com/spux?module'
-      import Plyr from 'https://jspm.dev/plyr'
-
-      render(
-        html`
-          <div class="container">
-            <div
-              id="player"
-              data-plyr-provider="youtube"
-              data-plyr-embed-id="${di.data.youtubeid}"
-            ></div>
-          </div>
-        `,
-        document.body
-      )
-
-      new Plyr('#player', {})
-    </script>
-  </head>
-
-  <body></body>
-</html>
+<script type="application/ld+json" id="data">
+  { "youtubeid": "m3jNb7IdJHQ" }
+</script>
+<script type="module" src="https://unpkg.com/spux-rocks/video.js"></script>
