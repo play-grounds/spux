@@ -1,0 +1,48 @@
+<script
+  type="application/ld+json"
+  id="data"
+  src="https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty"
+>
+  1
+</script>
+<script type="module">
+  import 'https://jspm.dev/dior'
+  import { html, h, render } from 'https://unpkg.com/spux?module'
+
+  var id = 'data'
+
+  function fetchSrc (id) {
+    var el = document.getElementById(id)
+    var src = el.src
+    var type = el.type
+    console.log('fetching', src)
+    window
+      .fetch(src, { headers: { Accept: type } })
+      .then(response => response.json())
+      .then(json => {
+        if (di[id] && json && JSON.stringify(di[id]) !== JSON.stringify(json)) {
+          console.log('updating di.' + id)
+          di[id] = json
+          render(
+            html`
+              ${di[id].map(
+                i =>
+                  html`
+                    <div class="row">
+                      <a
+                        target="_blank"
+                        href="https://news.ycombinator.com/item?id=${i}"
+                        >${i}</a
+                      >
+                    </div>
+                  `
+              )}
+            `,
+            document.body
+          )
+        }
+      })
+  }
+
+  fetchSrc(id)
+</script>

@@ -1,7 +1,5 @@
 export default subscribe
 
-// var wss = 'wss://melvin.solid.live/'
-
 // UPDATES
 function subscribe (id) {
   var el = document.getElementById(id)
