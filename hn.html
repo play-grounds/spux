@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://spux.org/css/spux.css" />
+
 <script
   type="application/ld+json"
   id="data"
@@ -29,11 +31,20 @@
                 i =>
                   html`
                     <div class="row">
-                      <a
-                        target="_blank"
-                        href="https://news.ycombinator.com/item?id=${i}"
-                        >${i}</a
-                      >
+                      <div class="col">
+                        ${i} |
+                        <a
+                          target="_blank"
+                          href="https://news.ycombinator.com/item?id=${i}"
+                          >comments</a
+                        >
+                        |
+                        <a
+                          target="_blank"
+                          href="https://hacker-news.firebaseio.com/v0/item/${i}.json?print=pretty"
+                          >json</a
+                        >
+                      </div>
                     </div>
                   `
               )}
