@@ -1,6 +1,15 @@
-import 'https://jspm.dev/dior'
+import 'https://unpkg.com/dior'
 import { h, html, render, Component } from 'https://unpkg.com/spux?module'
 import Plyr from 'https://jspm.dev/plyr'
+
+globalThis.defaults = {
+  provider: 'youtube',
+  embedid: 'm3jNb7IdJHQ',
+  t: 0,
+  currentTime: 0
+}
+
+globalThis.spux = { ...defaults, ...di.data, ...qs }
 
 document.head.insertAdjacentHTML(
   'beforeend',
@@ -12,12 +21,17 @@ render(
     <div class="container">
       <div
         id="player"
-        data-plyr-provider="youtube"
-        data-plyr-embed-id="${di.data.youtubeid}"
+        data-plyr-provider="${spux.provider}"
+        data-plyr-embed-id="${spux.embedid}"
       ></div>
     </div>
   `,
   document.body
 )
 
-new Plyr('#player', {})
+globalThis.player = new Plyr('#player', {})
+console.log(spux)
+
+globalThis.player.on('ready', event => {
+  globalThis.player.currentTime = parseInt(spux.currentTime || parseInt(spux.t))
+})
