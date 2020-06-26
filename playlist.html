@@ -93,13 +93,19 @@
       let mo = di.data[item]
       console.log(mo)
       spux.contentUrl = mo.contentUrl
+      let sources = []
+
+      if (mo.contentUrl.includes('youtube.com')) {
+        sources = [{ provider: 'youtube', src: mo.contentUrl.split('/').pop() }]
+      } else if (mo.contentUrl.includes('vimeo.com')) {
+        sources = [{ provider: 'vimeo', src: mo.contentUrl.split('/').pop() }]
+      } else {
+        sources = [{ type: 'video/mp4', src: mo.contentUrl }]
+      }
+
       globalThis.player.source = {
         type: 'video',
-        sources: [
-          {
-            src: mo.contentUrl
-          }
-        ]
+        sources: sources
       }
     }
 
