@@ -89,7 +89,7 @@ class App extends Component {
       <div class="row">Playlist</div>
       <div class="row" id="playlist">
         <div class="col 1 vc">
-          <div class="row btn"></div>
+          <div class="row"></div>
           ${di.data.map((i, j) => {
             return html`
               <div
