@@ -1,0 +1,35 @@
+<script type="application/ld+json" id="data"></script>
+<script type="module">
+  import 'https://unpkg.com/dior'
+  import { h, html, render, Component } from 'https://unpkg.com/spux?module'
+  import Plyr from 'https://jspm.dev/plyr'
+
+  document.head.insertAdjacentHTML(
+    'beforeend',
+    `<link rel="stylesheet" href="https://unpkg.com/plyr@3/dist/plyr.css" />`
+  )
+
+  document.head.insertAdjacentHTML(
+    'beforeend',
+    `<link rel="stylesheet" href="https://spux.org/css/spux.css" />`
+  )
+
+  globalThis.defaults = {
+    src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
+  }
+
+  var spux = { ...defaults, ...qs }
+
+  render(
+    html`
+      <video id="player" playsinline controls>
+        <source src="${spux.src}" type="video/mp4" />
+      </video>
+    `,
+    document.body
+  )
+
+  globalThis.player = new Plyr('#player', {
+    /* options */
+  })
+</script>
