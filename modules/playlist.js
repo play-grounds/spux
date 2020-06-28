@@ -27,6 +27,12 @@ document.head.insertAdjacentHTML(
   `<link rel="stylesheet" href="https://spux.org/css/spux.css" />`
 )
 
+function getThingsByType (type) {
+  return di.data.filter(i => {
+    return i.type === type || i['@type'] === type
+  })
+}
+
 class App extends Component {
   constructor (props) {
     super(props)
@@ -61,7 +67,7 @@ class App extends Component {
       <div class="row" id="playlist">
         <div class="col 1 vc">
           <div class="row"></div>
-          ${di.data.map((i, j) => {
+          ${getThingsByType('MediaObject').map((i, j) => {
             return html`
               <div
                 key="${j}"
