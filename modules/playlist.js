@@ -6,14 +6,16 @@ import MediaObject from 'https://unpkg.com/spux-components/MediaObject.js'
 
 // defaults
 globalThis.defaults = {
-  '@id': '#1',
-  '@type': 'MediaObject',
-  contentUrl: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
-  startTime: 0
+  '@id': '',
+  currentTrack: '#1'
 }
 
 // init
-globalThis.spux = { ...defaults, ...di.data[0], ...qs }
+globalThis.spux = {
+  ...defaults,
+  ...getThingsByType('MediaObject')[0],
+  ...qs
+}
 
 // render
 document.head.insertAdjacentHTML(
