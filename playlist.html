@@ -1,26 +1,36 @@
 <script type="application/ld+json" id="data">
   [
     {
+      "@id": "",
+      "@type": "PlaylistDocument",
+      "primaryTopic": "#playlist"
+    },
+    {
+      "@id": "#playlist",
+      "@type": "Playlist",
+      "references": ["#1", "#2", "#3"],
+      "currentTrack": "#1"
+    },
+    {
       "@id": "#1",
       "@type": "MediaObject",
       "contentUrl": "https://www.youtube.com/watch?v=wBTLOm-5PLA",
       "startTime": 0,
-      "name": "Runway HBO Westworld",
-      "current": true
+      "name": "Runway HBO Westworld"
     },
     {
       "@id": "#2",
       "@type": "MediaObject",
-      "contentUrl": "https://vimeo.com/402577241",
-      "name": "Micro Droplets",
+      "contentUrl": "https://vimeo.com/378176559",
+      "name": "Best Films 2019",
       "startTime": 0
     },
     {
       "@id": "#3",
       "@type": "MediaObject",
-      "contentUrl": "http://www.html5videoplayer.net/videos/toystory.mp4",
+      "contentUrl": "http://www.peach.themazzone.com/durian/movies/sintel-2048-surround.mp4",
       "startTime": 0,
-      "name": "Toy Story 4 Trailer"
+      "name": "Sintel Trailer"
     }
   ]
 </script>

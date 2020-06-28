@@ -41,8 +41,11 @@ class App extends Component {
 
   handleChange (e) {
     let item = e.target.getAttribute('item')
-    let mo = di.data[item]
-    console.log(mo)
+    console.log('item', item)
+    let mo = getThingsByType('MediaObject').filter(i => i['@id'] === item)[0]
+    console.log('mo', mo)
+
+    // let mo = di.data[item]
     spux.contentUrl = mo.contentUrl
     let sources = []
 
@@ -71,7 +74,7 @@ class App extends Component {
             return html`
               <div
                 key="${j}"
-                item="${j}"
+                item="${i['@id']}"
                 onClick=${this.handleChange}
                 class="row btn"
               >
