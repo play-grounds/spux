@@ -323,9 +323,13 @@
     console.log(MediaObject)
     render(
       html`
-        <${MediaObject}
-          contentUrl="https://www.youtube.com/watch?v=f7hbWvHKns0"
-        />
+        <div style="max-width: 854px; height: 480px;" class="container">
+          <div
+            id="player"
+            data-plyr-provider="youtube"
+            data-plyr-embed-id="https://www.youtube.com/watch?v=f7hbWvHKns0"
+          ></div>
+        </div>
       `,
       document.getElementById('ID_541254941')
     )
