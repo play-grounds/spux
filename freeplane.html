@@ -227,7 +227,7 @@
                   "ID": "ID_1480455907",
                   "CREATED": "1594504799790",
                   "MODIFIED": "1594504806523",
-                  "LINK": "https://www.youtube.com/watch?v=V0EnAZp8S7o"
+                  "LINK": "https://www.youtube.com/watch?v=f7hbWvHKns0"
                 }
               },
               {
@@ -325,19 +325,20 @@
     globalThis.defaults._target
   )
 
+  var videos = [...document.getElementsByTagName('li')].filter(i =>
+    i.children[0]?.children[0]?.href.match(/youtube.com/)
+  )
+
   setTimeout(() => {
     console.log(MediaObject)
     render(
       html`
-        <div style="max-width: 854px; height: 480px;" class="container">
-          <div
-            id="player"
-            data-plyr-provider="youtube"
-            data-plyr-embed-id="https://www.youtube.com/watch?v=f7hbWvHKns0"
-          ></div>
-        </div>
+        <${MediaObject}
+          style="max-width: 854px; height: 480px;"
+          contentUrl="${videos[0].children[0]?.children[0]?.href}"
+        />
       `,
-      document.getElementById('ID_1480455907')
+      videos[0]
     )
 
     globalThis.player = new Plyr('#player', {})
