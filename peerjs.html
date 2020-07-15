@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <button>connect</button>
+
+    <script src="https://unpkg.com/peerjs/dist/peerjs.min.js"></script>
+    <script defer type="text/javascript">
+      function main () {
+        var id = 'httpid_' + Math.floor(Math.random() * 10000)
+        var peer = new Peer('' + id, {
+          host: 'localhost',
+          port: '9000',
+          path: '/tmp',
+          iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }]
+        })
+        console.log('id', id)
+        console.log('peer', peer)
+
+        var myid
+
+        peer.on('open', function (id) {
+          myid = id
+          appendMsg('My peer ID is: <strong>' + id + '</strong>')
+          appendMsg('Open a new tab and use this to connect')
+        })
+
+        var button = document.querySelector('button')
+        button.addEventListener(
+          'click',
+          function () {
+            var peerID = prompt('Peer id?')
+
+            if (!peerID) {
+              appendMsg('No peer id added. Try again')
+              return
+            }
+            if (myid == peerID) {
+              appendMsg("You can't connect to yourself. Try again in a new tab")
+              return
+            }
+            var conn = peer.connect(peerID) // who to connect to
+            conn.on('open', function () {
+              // when the connection is ready
+              appendMsg('Connection opened. Sent message')
+              appendMsg('Try looking in the other tab')
+              conn.send('hi!')
+            })
+          },
+          false
+        )
+
+        peer.on('connection', function (conn) {
+          appendMsg('Connected to remote peer')
+          // this event is triggered when a connection
+          // has been established with a remote peer
+
+          // we can use the `conn` object to listen for data events
+          conn.on('open', function () {
+            conn.on('data', function (data) {
+              // data contains the received message
+              console.log(data)
+              appendMsg('Message from peer: ' + data)
+            })
+          })
+        })
+
+        function appendMsg (msg) {
+          var el = document.createElement('p')
+          el.innerHTML = msg
+          document.body.appendChild(el)
+        }
+      }
+
+      setTimeout(main, 1000)
+    </script>
+  </body>
+</html>
+
