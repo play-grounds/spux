@@ -11,9 +11,10 @@
       function main () {
         var id = 'httpid_' + Math.floor(Math.random() * 10000)
         var peer = new Peer('' + id, {
-          host: 'localhost',
+          host: 'melvincarvalho.com',
           port: '9000',
           path: '/tmp',
+          secure: false,
           iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }]
         })
         console.log('id', id)
@@ -78,4 +79,3 @@
     </script>
   </body>
 </html>
-
