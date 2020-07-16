@@ -110,7 +110,7 @@
       return html`
         <${Navbar} title="P2P" />
         <div class="row">
-          <div class="col 2">
+          <div class="col 1">
             <div>Status: ${this.state.status}</div>
             <div>PeerID: <strong>${this.state.peer?._id}</strong></div>
             <div>
@@ -128,11 +128,12 @@
               /><br /><button onclick=${this.connectToPeer}>
                 Send
               </button>
+              <hr />
             </div>
           </div>
 
           <div
-            class="col 10"
+            class="col 11"
             style="border-left: 4px solid #D3D3D3; padding-left: 10px"
           >
             ${this.state.messages?.map(
