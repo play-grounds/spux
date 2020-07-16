@@ -7,7 +7,8 @@
       "port": "9000",
       "path": "/tmp",
       "iceServers": [{ "urls": ["stun:stun.l.google.com:19302"] }]
-    }
+    },
+    "peerUri": "https://melvincarvalho.com:9000/tmp/peerjs/peers"
   }
 </script>
 
@@ -40,7 +41,8 @@
         peer: null,
         messages: [],
         connect: qs.peer || '',
-        message: 'hi!'
+        message: 'hi!',
+        peers: []
       }
       this.connectToPeer = this.connectToPeer.bind(this)
       this.sendMessage = this.sendMessage.bind(this)
@@ -109,6 +111,12 @@
         })
       })
 
+      fetch('https://melvincarvalho.com:9000/tmp/peerjs/peers')
+        .then(response => response.json())
+        .then(data => {
+          that.setState({ peers: data })
+        })
+
       this.setState({ status: 'created', peer: peer })
     }
 
@@ -135,6 +143,13 @@
                 Send
               </button>
               <hr />
+              <div>Online</div>
+              <hr />
+              ${this.state.peers.map(i => {
+                return html`
+                  <div class="card">${i}</div>
+                `
+              })}
             </div>
           </div>
 
