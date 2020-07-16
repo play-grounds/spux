@@ -20,7 +20,7 @@
   import 'https://cdn.skypack.dev/dior'
 
   function createPeer () {
-    var id = 'httpid_' + Math.floor(Math.random() * 10000)
+    var id = qs.id || 'p' + Math.floor(Math.random() * 100)
     var peer = new Peer('' + id, di.data.peerjs)
     return peer
   }
