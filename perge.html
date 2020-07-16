@@ -133,7 +133,7 @@
         // })
 
         instance.select(id)(Automerge.change, doc => {
-          doc.message = 'Hey!'
+          doc.message = '' + Math.random()
         })
 
         // Automerge.change(doc, d => {
