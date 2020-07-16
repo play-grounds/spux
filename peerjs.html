@@ -32,7 +32,7 @@
       this.state = {
         status: 'empty',
         peer: null,
-        messages: ['Messages:'],
+        messages: [],
         connect: qs.peer || '',
         message: 'hi!'
       }
@@ -136,6 +136,7 @@
             class="col 11"
             style="border-left: 4px solid #D3D3D3; padding-left: 10px"
           >
+            <div>Messages</div>
             ${this.state.messages?.map(
               i =>
                 html`
