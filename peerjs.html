@@ -50,6 +50,7 @@
         that.setState({ status: 'Connection opened. Sent message' })
         that.setState({ status: 'Try looking in the other tab' })
         conn.send(that.state.message)
+        that.pushMessage('Sent to peer: ' + that.state.message)
       })
     }
 
