@@ -1,80 +1,142 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-  </head>
-  <body>
-    <button>connect</button>
+<link rel="stylesheet" href="https://spux.org/css/spux.css" />
 
-    <script src="https://unpkg.com/peerjs/dist/peerjs.min.js"></script>
-    <script defer type="text/javascript">
-      function main () {
-        var id = 'httpid_' + Math.floor(Math.random() * 10000)
-        var peer = new Peer('' + id, {
-          host: 'melvincarvalho.com',
-          port: '9000',
-          path: '/tmp',
-          iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }]
-        })
-        console.log('id', id)
-        console.log('peer', peer)
+<script type="application/ld+json" id="data">
+  {
+    "peerjs": {
+      "host": "melvincarvalho.com",
+      "port": "9000",
+      "path": "/tmp",
+      "iceServers": [{ "urls": ["stun:stun.l.google.com:19302"] }]
+    }
+  }
+</script>
 
-        var myid
+<script src="https://unpkg.com/peerjs/dist/peerjs.min.js"></script>
 
-        peer.on('open', function (id) {
-          myid = id
-          appendMsg('My peer ID is: <strong>' + id + '</strong>')
-          appendMsg('Open a new tab and use this to connect')
-        })
+<script type="module">
+  import Navbar from 'https://unpkg.com/spux-components/Navbar.js'
 
-        var button = document.querySelector('button')
-        button.addEventListener(
-          'click',
-          function () {
-            var peerID = prompt('Peer id?')
+  import { h, html, Component, render } from 'https://cdn.skypack.dev/spux'
+  import 'https://cdn.skypack.dev/dior'
 
-            if (!peerID) {
-              appendMsg('No peer id added. Try again')
-              return
-            }
-            if (myid == peerID) {
-              appendMsg("You can't connect to yourself. Try again in a new tab")
-              return
-            }
-            var conn = peer.connect(peerID) // who to connect to
-            conn.on('open', function () {
-              // when the connection is ready
-              appendMsg('Connection opened. Sent message')
-              appendMsg('Try looking in the other tab')
-              conn.send('hi!')
-            })
-          },
-          false
-        )
+  function createPeer () {
+    var id = 'httpid_' + Math.floor(Math.random() * 10000)
+    var peer = new Peer('' + id, di.data.peerjs)
+    return peer
+  }
 
-        peer.on('connection', function (conn) {
-          appendMsg('Connected to remote peer')
-          // this event is triggered when a connection
-          // has been established with a remote peer
+  class App extends Component {
+    constructor (props) {
+      super(props)
+      this.state = {
+        status: 'empty',
+        peer: null,
+        messages: ['Incoming Messages:'],
+        connect: '',
+        message: 'hi!'
+      }
+      this.connectToPeer = this.connectToPeer.bind(this)
+      this.sendMessage = this.sendMessage.bind(this)
+      this.updateConnect = this.updateConnect.bind(this)
+      this.updateMessage = this.updateMessage.bind(this)
+    }
 
-          // we can use the `conn` object to listen for data events
-          conn.on('open', function () {
-            conn.on('data', function (data) {
-              // data contains the received message
-              console.log(data)
-              appendMsg('Message from peer: ' + data)
-            })
+    connectToPeer (e) {
+      var that = this
+      console.log('connecting to', this.state.connect)
+      var conn = this.state.peer.connect(this.state.connect) // who to connect to
+      conn.on('open', function () {
+        // when the connection is ready
+        that.setState({ status: 'Connection opened. Sent message' })
+        that.setState({ status: 'Try looking in the other tab' })
+        conn.send(that.state.message)
+      })
+    }
+
+    sendMessage (e) {
+      console.log('sending', this.state.connect)
+    }
+
+    pushMessage (str) {
+      this.setState({ messages: this.state.messages?.concat(str) })
+    }
+
+    updateConnect (evt) {
+      this.setState({
+        connect: evt.target.value
+      })
+    }
+
+    updateMessage (evt) {
+      this.setState({
+        message: evt.target.value
+      })
+    }
+
+    componentDidMount () {
+      var that = this
+      console.log('ready')
+
+      var peer = createPeer()
+
+      console.log('peer', peer)
+
+      peer.on('open', function (id) {
+        that.setState({ status: 'open' })
+      })
+
+      peer.on('connection', function (conn) {
+        console.log('Connected to remote peer')
+
+        // this event is triggered when a connection
+        // has been established with a remote peer
+
+        // we can use the `conn` object to listen for data events
+        conn.on('open', function () {
+          conn.on('data', function (data) {
+            // data contains the received message
+            console.log(data)
+            that.pushMessage('Message from peer: ' + data)
           })
         })
+      })
 
-        function appendMsg (msg) {
-          var el = document.createElement('p')
-          el.innerHTML = msg
-          document.body.appendChild(el)
-        }
-      }
+      this.setState({ status: 'created', peer: peer })
+    }
 
-      setTimeout(main, 1000)
-    </script>
-  </body>
-</html>
+    render () {
+      return html`
+        <${Navbar} title="P2P" />
+        <div>Status: ${this.state.status}</div>
+        <div>PeerID: <strong>${this.state.peer?._id}</strong></div>
+        <div>
+          <label>Connect To Peer:</label><br /><input
+            id="connect"
+            value=${this.state.connect}
+            onChange="${this.updateConnect}"
+          />
+        </div>
+        <div>
+          <label>Send message:</label><br /><input
+            id="message"
+            value=${this.state.message}
+            onChange="${this.updateMessage}"
+          /><br /><button onclick=${this.connectToPeer}>
+            Send
+          </button>
+        </div>
+        <div>
+          ${this.state.messages?.map(
+            i =>
+              html`
+                <div>${i}</div>
+              `
+          )}
+        </div>
+      `
+    }
+  }
+
+  // main()
+  render(h(App), document.body)
+</script>
