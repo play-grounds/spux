@@ -1,0 +1,158 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/automerge@0.14.1/dist/automerge.js"></script>
+    <script src="https://unpkg.com/peerjs@1.1.0/dist/peerjs.min.js"></script>
+    <script src="https://unpkg.com/cuid@2.1.6/dist/cuid.min.js"></script>
+  </head>
+
+  <body>
+    <h2>Automerge CRDT's synced with PeerJS</h2>
+    <hr />
+    <h4>Actor ID: <span id="actorId"></span></h4>
+    <form id="peerForm">
+      <input name="peerId" placeholder="Peer ID" />
+      <button type="submit">Connect</button>
+      <br />
+      <pre id="peers" style="margin: 1em; padding:1em;">{}</pre>
+    </form>
+    <hr />
+    <input id="docId" placeholder="Document ID" />
+    <button id="increment">Increment</button>
+    <pre id="docs" style="margin: 1em; padding:1em;">{}</pre>
+    <script type="module">
+      // import Perge from '../src/index'
+      // import { change } from 'automerge'
+
+      class Perge {
+        constructor (actorId, config = {}) {
+          this._connections = {}
+          this._actorId = actorId
+          this.peer = config.peer || new Peer(this._actorId)
+          this.docSet = config.docSet || new Automerge.DocSet()
+          this._encode = config.encode || JSON.stringify
+          this._decode = config.decode || JSON.parse
+          this.peer.on('connection', conn => {
+            conn.on('data', msg => {
+              this._connections[conn.peer].receiveMsg(this._decode(msg))
+            })
+          })
+        }
+        connect (id, conn) {
+          if (this._connections[id]) return this.peer.connections[id]
+          const peer = conn || this.peer.connect(id)
+          const connection = (this._connections[id] = new Automerge.Connection(
+            this.docSet,
+            msg => {
+              peer.send(this._encode(msg))
+            }
+          ))
+          peer.on('disconnected', () => {
+            connection.close()
+            delete this._connections[id]
+          })
+          connection.open()
+          return peer
+        }
+        get (id) {
+          return this.docSet.getDoc(id) || Automerge.init(this._actorId)
+        }
+        select (id) {
+          return (changeMethod, ...args) => {
+            const newDoc = changeMethod(this.get(id), ...args)
+            this.docSet.setDoc(id, newDoc)
+            return newDoc
+          }
+        }
+        subscribe (idOrSetHandler, callback) {
+          if (typeof idOrSetHandler === 'function') {
+            this.docSet.registerHandler(idOrSetHandler)
+            return () => this.docSet.unregisterHandler(idOrSetHandler)
+          }
+          if (typeof idOrSetHandler === 'string' && !!callback) {
+            const handler = (docId, doc) => {
+              if (docId === idOrSetHandler) callback(doc)
+            }
+            this.docSet.registerHandler(handler)
+            return () => this.docSet.unregisterHandler(handler)
+          }
+          return () => {}
+        }
+      }
+
+      const docs = document.getElementById('docs')
+      const actorEl = document.getElementById('actorId')
+      const incrEl = document.getElementById('increment')
+      const docIdEl = document.getElementById('docId')
+      const peerForm = document.getElementById('peerForm')
+      const peersEl = document.getElementById('peers')
+
+      const getDocId = () => docIdEl.value || 'default'
+
+      // Unique ID for this user
+      const actorId = cuid()
+      actorEl.innerText = actorId
+
+      // Instantiate a PeerJS connection
+      const peer = (window.peer = new Peer(actorId, {
+        host: 'melvincarvalho.com',
+        port: '9000',
+        path: '/tmp',
+        iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }]
+      }))
+
+      // Instantiate an Automerge.DocSet
+      let docSet = (window.docSet = new Automerge.DocSet())
+
+      // Instantiate Perge library
+      const instance = (window.instance = new Perge(actorId, {
+        decode: JSON.parse, // msgpack or protobuf would also be a good option
+        encode: JSON.stringify,
+        peer: peer,
+        docSet: docSet
+      }))
+
+      // This handler gets invoked whenever the DocSet is updated, useful for re-rendering views.
+      instance.subscribe(() => {
+        docs.innerText = JSON.stringify(docSet.docs, null, 2)
+      })
+
+      // subscribe returns an unsubscribe function
+      const unsubscribeFromFoo = instance.subscribe('foo', doc => {
+        console.log('foo', doc)
+        if (doc.counter.value === 10) {
+          unsubscribeFromFoo()
+          console.log('unsubscribed from foo!')
+        }
+      })
+
+      incrEl.onclick = () => {
+        const id = getDocId()
+        // Update the document
+        // const doc = instance.select(id)(change, d => {
+        //   d.now = new Date().valueOf()
+        // })
+
+        instance.select(id)(Automerge.change, doc => {
+          doc.message = 'Hey!'
+        })
+
+        // Automerge.change(doc, d => {
+        //   if (!d.counter) d.counter = new Automerge.Counter()
+        //   else d.counter.increment()
+        // })
+      }
+
+      peerForm.onsubmit = e => {
+        e.preventDefault()
+        const formData = new FormData(peerForm)
+        const peerId = formData.get('peerId')
+        instance.connect(peerId, peer.connect(peerId))
+        peersEl.innerText = JSON.stringify(
+          Array.from(peer._connections.keys()),
+          null,
+          2
+        )
+      }
+    </script>
+  </body>
+</html>
