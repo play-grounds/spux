@@ -18,9 +18,10 @@
 
   import { h, html, Component, render } from 'https://cdn.skypack.dev/spux'
   import 'https://cdn.skypack.dev/dior'
+  var id
 
   function createPeer () {
-    var id = qs.id || 'p' + Math.floor(Math.random() * 100)
+    id = qs.id || 'p' + Math.floor(Math.random() * 100)
     var peer = new Peer('' + id, di.data.peerjs)
     return peer
   }
@@ -48,9 +49,9 @@
       conn.on('open', function () {
         // when the connection is ready
         that.setState({ status: 'Connection opened. Sent message' })
-        that.setState({ status: 'Try looking in the other tab' })
+        that.setState({ status: 'Try looking in the other window' })
         conn.send(that.state.message)
-        that.pushMessage('Sent to peer: ' + that.state.message)
+        that.pushMessage(id + ': ' + that.state.message)
       })
     }
 
@@ -97,7 +98,7 @@
           conn.on('data', function (data) {
             // data contains the received message
             console.log(data)
-            that.pushMessage('Message from peer: ' + data)
+            that.pushMessage(that.state.connect + ': ' + data)
           })
         })
       })
