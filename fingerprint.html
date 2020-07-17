@@ -1,0 +1,38 @@
+<script src="//cdn.jsdelivr.net/npm/fingerprintjs2/dist/fingerprint2.min.js"></script>
+
+<script type="application/ld+json" id="data"></script>
+<script type="module">
+  import { h, html, render, Component } from 'https://cdn.skypack.dev/spux'
+
+  if (window.requestIdleCallback) {
+    requestIdleCallback(function () {
+      Fingerprint2.get(function (components) {
+        console.log(components) // an array of components: {key: ..., value: ...}
+        render(
+          html`
+            ${components.map(i => {
+              return html`
+                <div>
+                  <span>${i.key}</span><span><pre>${i.value}</pre></span>
+                </div>
+              `
+            })}
+          `,
+          document.body
+        )
+      })
+    })
+  } else {
+    setTimeout(function () {
+      Fingerprint2.get(function (components) {
+        console.log(components) // an array of components: {key: ..., value: ...}
+        render(
+          html`
+            test
+          `,
+          document.body
+        )
+      })
+    }, 500)
+  }
+</script>
