@@ -12,9 +12,7 @@
           html`
             ${components.map(i => {
               return html`
-                <div>
-                  <span>${i.key}</span><span><pre>${i.value}</pre></span>
-                </div>
+                <pre>${JSON.stringify(components, null, 2)}</pre>
               `
             })}
           `,
@@ -28,7 +26,7 @@
         console.log(components) // an array of components: {key: ..., value: ...}
         render(
           html`
-            test
+            <pre>${JSON.stringify(components, null, 2)}</pre>
           `,
           document.body
         )
