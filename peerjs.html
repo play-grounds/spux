@@ -91,52 +91,53 @@
       Fingerprint2.get(components => {
         console.log(components)
         console.log('sha', sha256(JSON.stringify(components, null, 2)))
-      })
 
-      id = qs.id || 'p' + Math.floor(Math.random() * 100)
+        id = qs.id || 'p' + Math.floor(Math.random() * 100)
 
-      var peer = createPeer(id)
+        var peer = createPeer(id)
 
-      console.log('peer', peer)
+        console.log('peer', peer)
 
-      peer.on('open', function (id) {
-        that.setState({ status: 'open' })
-      })
+        peer.on('open', function (id) {
+          that.setState({ status: 'open' })
+        })
 
-      peer.on('connection', function (conn) {
-        console.log('Connected to remote peer')
+        peer.on('connection', function (conn) {
+          console.log('Connected to remote peer')
 
-        // this event is triggered when a connection
-        // has been established with a remote peer
+          // this event is triggered when a connection
+          // has been established with a remote peer
 
-        // we can use the `conn` object to listen for data events
-        conn.on('open', function () {
-          conn.on('data', function (data) {
-            // data contains the received message
-            console.log(data)
-            that.pushMessage(that.state.connect + ': ' + data)
+          // we can use the `conn` object to listen for data events
+          conn.on('open', function () {
+            conn.on('data', function (data) {
+              // data contains the received message
+              console.log(data)
+              that.pushMessage(that.state.connect + ': ' + data)
+            })
           })
         })
+
+        setTimeout(() => {
+          fetch('https://melvincarvalho.com:9000/tmp/peerjs/peers')
+            .then(response => response.json())
+            .then(data => {
+              that.setState({ peers: data })
+            })
+        }, 500)
+
+        that.setState({ status: 'created', peer: peer })
       })
-
-      setTimeout(() => {
-        fetch('https://melvincarvalho.com:9000/tmp/peerjs/peers')
-          .then(response => response.json())
-          .then(data => {
-            that.setState({ peers: data })
-          })
-      }, 500)
-
-      this.setState({ status: 'created', peer: peer })
     }
 
     render () {
       return html`
         <${Navbar} title="P2P" />
         <div class="row">
-          <div class="col 1">
+          <div class="col 2">
             <div>Status: ${this.state.status}</div>
-            <div>PeerID: <strong>${this.state.peer?._id}</strong></div>
+            <div>PeerID</div>
+            <div><strong>${this.state.peer?._id}</strong></div>
             <div>
               <label>Connect To Peer:</label><br /><input
                 id="connect"
