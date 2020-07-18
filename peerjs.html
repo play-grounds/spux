@@ -93,7 +93,7 @@
         console.log('sha', sha256(JSON.stringify(components, null, 2)))
 
         // id = qs.id || 'p' + Math.floor(Math.random() * 100)
-        id = sha256(JSON.stringify(components, null, 2))
+        id = sha256(JSON.stringify(components, null, 2)).substr(-8)
 
         var peer = createPeer(id)
 
