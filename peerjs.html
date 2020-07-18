@@ -159,7 +159,7 @@
                 id="message"
                 value=${this.state.message}
                 onChange="${this.updateMessage}"
-              /><br /><button onclick=${this.connectToPeer}>
+              /><br /><button onClick=${this.connectToPeer}>
                 Send
               </button>
               <hr />
@@ -181,7 +181,7 @@
             ${this.state.messages?.map(
               i =>
                 html`
-                  <div key=${$i} onclick=${handleRoster}>${i}</div>
+                  <div key=${$i} onClick=${handleRoster}>${i}</div>
                 `
             )}
           </div>
