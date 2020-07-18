@@ -111,11 +111,13 @@
         })
       })
 
-      fetch('https://melvincarvalho.com:9000/tmp/peerjs/peers')
-        .then(response => response.json())
-        .then(data => {
-          that.setState({ peers: data })
-        })
+      setTimeout(() => {
+        fetch('https://melvincarvalho.com:9000/tmp/peerjs/peers')
+          .then(response => response.json())
+          .then(data => {
+            that.setState({ peers: data })
+          })
+      }, 500)
 
       this.setState({ status: 'created', peer: peer })
     }
