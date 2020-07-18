@@ -80,9 +80,19 @@
     }
 
     updateMessage (evt) {
-      this.setState({
-        connect: evt.target.value
-      })
+      console.log(evt)
+      console.log(evt.key)
+      console.log(evt)
+      if (evt.key === 'Enter') {
+        this.connectToPeer(evt.target.value)
+        this.setState({
+          message: ''
+        })
+      } else {
+        this.setState({
+          message: evt.target.value
+        })
+      }
     }
 
     handleRoster (evt) {
@@ -155,14 +165,6 @@
               />
             </div>
             <div>
-              <label>Send message:</label><br /><input
-                id="message"
-                value=${this.state.message}
-                onChange="${this.updateMessage}"
-              /><br /><button onClick=${this.connectToPeer}>
-                Send
-              </button>
-              <hr />
               <div>Online</div>
               <hr />
               ${this.state.peers.map(i => {
@@ -180,12 +182,20 @@
             style="border-left: 4px solid #D3D3D3; padding-left: 10px"
           >
             <div>Messages</div>
+            <hr />
             ${this.state.messages?.map(
               i =>
                 html`
                   <div>${i}</div>
                 `
             )}
+
+            <input
+              class="card w-100"
+              id="message"
+              value=${this.state.message}
+              onKeyup=${this.updateMessage}
+            />
           </div>
         </div>
       `
