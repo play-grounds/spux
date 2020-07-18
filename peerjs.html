@@ -49,6 +49,7 @@
       this.sendMessage = this.sendMessage.bind(this)
       this.updateConnect = this.updateConnect.bind(this)
       this.updateMessage = this.updateMessage.bind(this)
+      this.handleRoster = this.handleRoster.bind(this)
     }
 
     connectToPeer (e) {
@@ -79,6 +80,13 @@
     }
 
     updateMessage (evt) {
+      this.setState({
+        connect: evt.target.value
+      })
+    }
+
+    updateMessage (evt) {
+      console.log(evt.target.value)
       this.setState({
         message: evt.target.value
       })
@@ -173,7 +181,7 @@
             ${this.state.messages?.map(
               i =>
                 html`
-                  <div>${i}</div>
+                  <div key=${$i} onclick=${handleRoster}>${i}</div>
                 `
             )}
           </div>
