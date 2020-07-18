@@ -86,9 +86,9 @@
     }
 
     handleRoster (evt) {
-      console.log(evt.target)
+      console.log(evt.target.innerText)
       this.setState({
-        message: evt.target.value
+        connect: evt.target.innerText
       })
     }
 
