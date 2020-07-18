@@ -62,6 +62,9 @@
         that.setState({ status: 'Try looking in the other window' })
         conn.send(that.state.message)
         that.pushMessage(id + ': ' + that.state.message)
+        that.setState({
+          message: ''
+        })
       })
     }
 
@@ -85,9 +88,6 @@
       console.log(evt)
       if (evt.key === 'Enter') {
         this.connectToPeer(evt.target.value)
-        this.setState({
-          message: ''
-        })
       } else {
         this.setState({
           message: evt.target.value
