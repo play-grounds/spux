@@ -167,13 +167,15 @@
             <div>
               <div>Online</div>
               <hr />
-              ${this.state.peers.map(i => {
-                return html`
-                  <div key=${i} onClick=${this.handleRoster} class="card">
-                    ${i}
-                  </div>
-                `
-              })}
+              ${this.state.peers
+                .filter(i => i !== this.state.peer?._id)
+                .map(i => {
+                  return html`
+                    <div key=${i} onClick=${this.handleRoster} class="card">
+                      ${i}
+                    </div>
+                  `
+                })}
             </div>
           </div>
 
