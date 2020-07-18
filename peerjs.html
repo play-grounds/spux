@@ -1,3 +1,4 @@
+<script src="//cdn.jsdelivr.net/npm/fingerprintjs2/dist/fingerprint2.min.js"></script>
 <link rel="stylesheet" href="https://spux.org/css/spux.css" />
 
 <script type="application/ld+json" id="data">
@@ -22,13 +23,13 @@
 
 <script type="module">
   import Navbar from 'https://unpkg.com/spux-components/Navbar.js'
+  import sha256 from 'https://brain-wallet.github.io/brain-wallet/web_modules/js-sha256.js'
 
   import { h, html, Component, render } from 'https://cdn.skypack.dev/spux'
   import 'https://cdn.skypack.dev/dior'
   var id
 
-  function createPeer () {
-    id = qs.id || 'p' + Math.floor(Math.random() * 100)
+  function createPeer (id) {
     var peer = new Peer('' + id, di.data.peerjs)
     return peer
   }
@@ -87,7 +88,14 @@
       var that = this
       console.log('ready')
 
-      var peer = createPeer()
+      Fingerprint2.get(components => {
+        console.log(components)
+        console.log('sha', sha256(JSON.stringify(components, null, 2)))
+      })
+
+      id = qs.id || 'p' + Math.floor(Math.random() * 100)
+
+      var peer = createPeer(id)
 
       console.log('peer', peer)
 
