@@ -167,7 +167,7 @@
               <hr />
               ${this.state.peers.map(i => {
                 return html`
-                  <div class="card">${i}</div>
+                  <div key=${$i} onClick=${handleRoster} class="card">${i}</div>
                 `
               })}
             </div>
@@ -181,7 +181,7 @@
             ${this.state.messages?.map(
               i =>
                 html`
-                  <div key=${$i} onClick=${handleRoster}>${i}</div>
+                  <div>${i}</div>
                 `
             )}
           </div>
