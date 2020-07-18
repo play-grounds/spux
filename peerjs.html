@@ -123,6 +123,9 @@
 
         peer.on('connection', function (conn) {
           console.log('Connected to remote peer', conn.peer)
+          this.setState({
+            connect: conn.peer
+          })
 
           // this event is triggered when a connection
           // has been established with a remote peer
