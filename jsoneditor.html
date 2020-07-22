@@ -28,12 +28,20 @@
 
     <script type="module">
       import 'https://cdn.skypack.dev/dior'
+      import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
+
+      var id = data
+
       // create the editor
       const container = document.getElementById('jsoneditor')
-      const options = {}
+      var options = {
+        onChange: i => {
+          updateThis(id)
+        }
+      }
       const editor = new JSONEditor(container, options)
 
-      editor.set(di.data)
+      editor.set(di[id])
 
       // get json
       const updatedJson = editor.get()
