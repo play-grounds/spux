@@ -1,55 +1,52 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <!-- when using the mode "code", it's important to specify charset utf-8 -->
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script src="./jsoneditor/jsoneditor.min.js"></script>
 
-    <link
-      href="./jsoneditor/jsoneditor.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <script src="./jsoneditor/jsoneditor.min.js"></script>
+<script type="application/json" id="data">
+  {
+    "array": [1, 2, 3],
+    "boolean": true,
+    "color": "gold",
+    "null": null,
+    "number": 123,
+    "object": {
+      "a": "b",
+      "c": "d"
+    },
+    "string": "Hello World"
+  }
+</script>
 
-    <script type="application/json" id="data">
-      {
-        "array": [1, 2, 3],
-        "boolean": true,
-        "color": "gold",
-        "null": null,
-        "number": 123,
-        "object": {
-          "a": "b",
-          "c": "d"
-        },
-        "string": "Hello World"
-      }
-    </script>
+<script type="module">
+  import 'https://cdn.skypack.dev/dior'
+  import { render, html } from 'https://cdn.skypack.dev/spux'
+  import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
 
-    <script type="module">
-      import 'https://cdn.skypack.dev/dior'
-      import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
+  document.head.insertAdjacentHTML(
+    'beforeend',
+    `<link rel="stylesheet" href="./jsoneditor/jsoneditor.min.css" />`
+  )
 
-      var id = 'data'
+  render(
+    html`
+      <div id="jsoneditor" style="width: 400px; height: 400px;"></div>
+    `,
+    document.body
+  )
 
-      // create the editor
-      const container = document.getElementById('jsoneditor')
-      var options = {
-        onChangeJSON: json => {
-          console.log('updating', json)
-          di.data = json
-          updateThis(id)
-        }
-      }
-      const editor = new JSONEditor(container, options)
+  var id = 'data'
 
-      editor.set(di[id])
+  // create the editor
+  const container = document.getElementById('jsoneditor')
+  var options = {
+    onChangeJSON: json => {
+      console.log('updating', json)
+      di.data = json
+      updateThis(id)
+    }
+  }
+  const editor = new JSONEditor(container, options)
 
-      // get json
-      const updatedJson = editor.get()
-    </script>
-  </head>
-  <body>
-    <div id="jsoneditor" style="width: 400px; height: 400px;"></div>
-  </body>
-</html>
+  editor.set(di[id])
+
+  // get json
+  const updatedJson = editor.get()
+</script>
