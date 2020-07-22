@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- when using the mode "code", it's important to specify charset utf-8 -->
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+    <link
+      href="./jsoneditor/jsoneditor.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="./jsoneditor/jsoneditor.min.js"></script>
+
+    <script type="application/json" id="data">
+      {
+        "array": [1, 2, 3],
+        "boolean": true,
+        "color": "gold",
+        "null": null,
+        "number": 123,
+        "object": {
+          "a": "b",
+          "c": "d"
+        },
+        "string": "Hello World"
+      }
+    </script>
+
+    <script type="module">
+      import 'https://cdn.skypack.dev/dior'
+      // create the editor
+      const container = document.getElementById('jsoneditor')
+      const options = {}
+      const editor = new JSONEditor(container, options)
+
+      editor.set(di.data)
+
+      // get json
+      const updatedJson = editor.get()
+    </script>
+  </head>
+  <body>
+    <div id="jsoneditor" style="width: 400px; height: 400px;"></div>
+  </body>
+</html>
