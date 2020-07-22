@@ -1,0 +1,73 @@
+<script type="application/json" id="data">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "Introducing the self-driving bicycle in the Netherlands",
+    "description": "This spring, Google is introducing the self-driving bicycle in Amsterdam, the worldÃ¢â‚¬â„¢s premier cycling city. The Dutch cycle more than any other nation in the world, almost 900 kilometres per year per person, amounting to over 15 billion kilometres annually. The self-driving bicycle enables safe navigation through the city for Amsterdam residents, and furthers GoogleÃ¢â‚¬â„¢s ambition to improve urban mobility with technology. Google Netherlands takes enormous pride in the fact that a Dutch team worked on this innovation that will have great impact in their home country.",
+    "thumbnailUrl": [
+      "https://example.com/photos/1x1/photo.jpg",
+      "https://example.com/photos/4x3/photo.jpg",
+      "https://example.com/photos/16x9/photo.jpg"
+    ],
+    "duration": "PT1M54S",
+    "uploadDate": "2016-03-31T08:00:00+08:00",
+    "contentUrl": "http://www.peach.themazzone.com/durian/movies/sintel-2048-surround.mp4",
+    "embedUrl": "https://www.example.com/embed/123",
+    "interactionStatistic": {
+      "@type": "InteractionCounter",
+      "interactionType": {
+        "@type": "http://schema.org/WatchAction"
+      },
+      "userInteractionCount": 5647018
+    }
+  }
+</script>
+
+<script type="module">
+  import 'https://cdn.skypack.dev/dior'
+  import { render, html } from 'https://cdn.skypack.dev/spux'
+  import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
+  import JSONEditor from 'https://cdn.skypack.dev/jsoneditor'
+
+  document.head.insertAdjacentHTML(
+    'beforeend',
+    `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spux-assets/css/jsoneditor.css" />`
+  )
+
+  render(
+    html`
+      <div id="jsoneditor" style="width: 100%; height: 400px;"></div>
+      <div id="view"></div>
+    `,
+    document.body
+  )
+
+  var id = 'data'
+
+  // create the editor
+  const container = document.getElementById('jsoneditor')
+  var options = {
+    onChangeJSON: json => {
+      console.log('updating', json)
+      di.data = json
+      updateThis(id)
+    }
+  }
+  const editor = new JSONEditor(container, options)
+
+  editor.set(di[id])
+
+  // get json
+  const updatedJson = editor.get()
+
+  render(
+    html`
+      <hr />
+      <h1>${di.data.name}</h1>
+      <p>${di.data.description}</p>
+      <video width="500" controls src="${di.data.contentUrl}"></video>
+      <h5>Views: ${di.data.interactionStatistic.userInteractionCount}</h5>
+    `,
+    view
+  )
+</script>
