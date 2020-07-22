@@ -1,5 +1,3 @@
-<script src="./jsoneditor/jsoneditor.min.js"></script>
-
 <script type="application/json" id="data">
   {
     "array": [1, 2, 3],
@@ -19,10 +17,11 @@
   import 'https://cdn.skypack.dev/dior'
   import { render, html } from 'https://cdn.skypack.dev/spux'
   import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
+  import JSONEditor from 'https://cdn.skypack.dev/jsoneditor'
 
   document.head.insertAdjacentHTML(
     'beforeend',
-    `<link rel="stylesheet" href="./jsoneditor/jsoneditor.min.css" />`
+    `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spux-assets/css/jsoneditor.css" />`
   )
 
   render(
