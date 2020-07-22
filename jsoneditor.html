@@ -35,8 +35,9 @@
       // create the editor
       const container = document.getElementById('jsoneditor')
       var options = {
-        onChange: i => {
-          console.log('updating')
+        onChangeJSON: json => {
+          console.log('updating', json)
+          di.data = json
           updateThis(id)
         }
       }
