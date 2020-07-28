@@ -1,0 +1,20 @@
+<link
+  href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
+  rel="stylesheet"
+/>
+
+<script type="application/ld+json" id="data"></script>
+<script type="module">
+  console.log('tinykeys')
+  import tinykeys from 'https://unpkg.com/tinykeys?module'
+
+  tinykeys(window, {
+    'g i': () => {
+      alert('Goto Inbox')
+    }
+  })
+</script>
+
+<body>
+  Press g i
+</body>
