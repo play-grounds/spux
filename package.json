@@ -1,6 +1,6 @@
 {
   "name": "playgrounds-spux",
-  "version": "0.0.91",
+  "version": "0.0.92",
   "description": "spux playground",
   "main": "rss.js",
   "scripts": {
