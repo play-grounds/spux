@@ -7,14 +7,27 @@
   // see https://reactsvgicons.com/
   import { h, html, render, Component } from 'https://unpkg.com/spux?module'
 
+  const HeartIcon = props => html`
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      height="${props.height}"
+      width="${props.width}"
+      style="color: ${props.color || 'black'}"
+    >
+      <path
+        d="M12.76 3.76a6 6 0 018.48 8.48l-8.53 8.54a1 1 0 01-1.42 0l-8.53-8.54a6 6 0 018.48-8.48l.76.75.76-.75zm7.07 7.07a4 4 0 10-5.66-5.66l-1.46 1.47a1 1 0 01-1.42 0L9.83 5.17a4 4 0 10-5.66 5.66L12 18.66l7.83-7.83z"
+      />
+    </svg>
+  `
+
   render(
     html`
-      <svg fill="none" viewBox="0 0 24 24">
-        <path
-          fill="currentColor"
-          d="M20.328 11v2H7.5l3.243 3.243-1.415 1.414L3.672 12l5.656-5.657 1.415 1.414L7.5 11h12.828z"
-        />
-      </svg>
+      <div class="flex items-center">
+        <${HeartIcon} color="red" width="48px" height="16px" />
+        <${HeartIcon} color="purple" width="48px" height="32px" />
+        <${HeartIcon} color="pink" width="48px" height="48px" />
+      </div>
     `,
     document.body
   )
