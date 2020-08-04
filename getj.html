@@ -1,0 +1,32 @@
+<link
+  href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
+  rel="stylesheet"
+/>
+
+<script type="application/ld+json" id="data">
+  [
+    {
+      "@id": "#1",
+      "type": "Balance",
+      "source": "https://melvincarvalho.com/#me",
+      "amount": 320,
+      "currency": "satoshi"
+    },
+    {
+      "@id": "#2",
+      "type": "Balance",
+      "source": "https://spuxbot.com/web#id",
+      "amount": 680,
+      "currency": "satoshi"
+    }
+  ]
+</script>
+<script type="module">
+  import getj from 'https://unpkg.com/getj?module'
+
+  getj('https://spux.org/rocks/grid.html').then(console.log)
+</script>
+
+<body>
+  <div id="wrapper"></div>
+</body>
