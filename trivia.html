@@ -1,0 +1,37 @@
+<script type="application/ld+json" id="data">
+  [
+    {
+      "@id": ""
+    }
+  ]
+</script>
+<script type="module">
+  import { h, html, Component, render } from 'https://unpkg.com/spux?module'
+
+  const triviaUri = 'http://jservice.io/api/random'
+  var trivia = {}
+
+  fetch(triviaUri)
+    .then(response => response.json())
+    .then(data => {
+      trivia = data[0]
+      renderAll()
+    })
+
+  function renderAll () {
+    console.log(trivia)
+    render(
+      html`
+        <h2>${trivia.category.title}</h2>
+        <h3>${trivia.question}</h3>
+        <h3>Value: ${trivia.value}</h3>
+        <pre>${JSON.stringify(trivia, null, 2)}</pre>
+      `,
+      document.body
+    )
+  }
+</script>
+
+<body>
+  <div id="wrapper"></div>
+</body>
