@@ -51,6 +51,7 @@
       console.log('updating', json)
       di.data = json
       updateThis(id)
+      renderAll()
     }
   }
   const editor = new JSONEditor(container, options)
@@ -60,15 +61,19 @@
   // get json
   const updatedJson = editor.get()
 
-  render(
-    html`
-      <hr />
-      <h1>${di.data.name}</h1>
-      <p>${di.data.description}</p>
-      <video width="500" controls src="${di.data.contentUrl}"></video>
-      <h5>Views: ${di.data.interactionStatistic.userInteractionCount}</h5>
-      <p>Duration: ${di.data.duration}</p>
-    `,
-    view
-  )
+  function renderAll () {
+    render(
+      html`
+        <hr />
+        <h1>${di.data.name}</h1>
+        <p>${di.data.description}</p>
+        <video width="500" controls src="${di.data.contentUrl}"></video>
+        <h5>Views: ${di.data.interactionStatistic.userInteractionCount}</h5>
+        <p>Duration: ${di.data.duration}</p>
+      `,
+      view
+    )
+  }
+
+  renderAll()
 </script>
