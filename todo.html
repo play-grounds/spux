@@ -121,19 +121,59 @@
   }
 </style>
 
-<script type="application/ld+json" id="data"></script>
+<script type="application/ld+json" id="data">
+  [
+    { "@id": "" },
+    {
+      "@id": "#col1",
+      "title": "TODO",
+      "item": [
+        { "title": "item #1" },
+        { "title": "item #2" },
+        { "title": "item #3" },
+        { "title": "item #4" },
+        { "title": "item #5" }
+      ]
+    },
+    {
+      "@id": "#col2",
+      "title": "WORKING",
+      "item": [
+        { "title": "item #6" },
+        { "title": "item #7" },
+        { "title": "item #8" },
+        { "title": "item #9" },
+        { "title": "item #10" }
+      ]
+    },
+    {
+      "@id": "#col3",
+      "title": "DONE",
+      "item": [
+        { "title": "item #11" },
+        { "title": "item #12" },
+        { "title": "item #13" },
+        { "title": "item #14" },
+        { "title": "item #15" }
+      ]
+    }
+  ]
+</script>
 <script type="module">
   import { h, html, render, Component } from 'https://cdn.skypack.dev/spux'
   import 'https://cdn.skypack.dev/dior'
 
-  const Polaroid = () => {
+  const Item = props => {
     return html`
-      <li>
-        <img src="https://unsplash.it/300/300" width="200" />
-        <p>image #1</p>
-      </li>
+      <div class="board-item">
+        <div class="board-item-content">
+          <span>${props.title || 'Task'}</span>
+        </div>
+      </div>
     `
   }
+
+  console.log(di.data[1])
 
   render(
     html`
@@ -141,72 +181,42 @@
       <div class="board">
         <div class="board-column todo">
           <div class="board-column-container">
-            <div class="board-column-header">Todo</div>
+            <div class="board-column-header">${di.data[1].title}</div>
             <div class="board-column-content-wrapper">
               <div class="board-column-content">
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>1</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>2</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>3</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>4</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>5</div>
-                </div>
+                ${di.data[1].item?.map(i => {
+                  return html`
+                    <${Item} title="${i.title}" />
+                  `
+                })}
               </div>
             </div>
           </div>
         </div>
         <div class="board-column working">
           <div class="board-column-container">
-            <div class="board-column-header">Working</div>
+            <div class="board-column-header">${di.data[2].title}</div>
             <div class="board-column-content-wrapper">
               <div class="board-column-content">
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>6</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>7</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>8</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>9</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>10</div>
-                </div>
+                ${di.data[2].item?.map(i => {
+                  return html`
+                    <${Item} title="${i.title}" />
+                  `
+                })}
               </div>
             </div>
           </div>
         </div>
         <div class="board-column done">
           <div class="board-column-container">
-            <div class="board-column-header">Done</div>
+            <div class="board-column-header">${di.data[3].title}</div>
             <div class="board-column-content-wrapper">
               <div class="board-column-content">
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>11</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>12</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>13</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>14</div>
-                </div>
-                <div class="board-item">
-                  <div class="board-item-content"><span>Item #</span>15</div>
-                </div>
+                ${di.data[3].item?.map(i => {
+                  return html`
+                    <${Item} title="${i.title}" />
+                  `
+                })}
               </div>
             </div>
           </div>
