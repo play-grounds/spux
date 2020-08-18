@@ -229,13 +229,12 @@
     document.body
   )
 
-  var dragContainer = document.querySelector('.drag-container')
-  var itemContainers = [].slice.call(
+  globalThis.dragContainer = document.querySelector('.drag-container')
+  globalThis.itemContainers = [].slice.call(
     document.querySelectorAll('.board-column-content')
   )
-  var columnGrids = []
-  globalThis.columnGrids = columnGrids
-  var boardGrid
+  globalThis.columnGrids = []
+  globalThis.boardGrid = null
 
   // Init the column grids so we can drag those items around.
   itemContainers.forEach(function (container) {

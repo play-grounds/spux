@@ -45,14 +45,15 @@
           di[id][0].items = []
           di[id][1].items = []
           di[id][2].items = []
-          boardGrid?._items?.map((i, x) => {
-            let text = i._element.innerText.split('\n')
-            console.log(text, x)
-            di[id][x].name = text[0]
-            di[id][x].items = text.slice(1).reverse()
+
+          colGrids?.map((i, x) => {
+            i._items.map((j, y) => {
+              console.log(j)
+              console.log(j._element)
+              di[id][x].items.push(j._element?.innerText)
+            })
           })
-          console.log('di', di[id])
-          console.log('saving')
+          console.log(di[id])
           updateThis(id)
         }, 500)
       }
@@ -65,7 +66,7 @@
         const board = document.querySelector('.kanban-demo .board')
         const colTemplate = document.querySelector('.board-column-template')
         const itemTemplate = document.querySelector('.board-item-template')
-        const colGrids = []
+        globalThis.colGrids = []
 
         let colDragCounter = 0
 
