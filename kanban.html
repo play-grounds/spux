@@ -10,7 +10,36 @@
 
     <script src="https://cdn.jsdelivr.net/gh/haltu/muuri@0.9.3/dist/muuri.min.js"></script>
 
-    <script>
+    <script type="application/ld+json" id="data">
+      [
+        {
+          "name": "to do",
+          "type": "todo",
+          "items": [
+            "Figure out how to get more sponsors to support Muuri's development",
+            "Prioritize non-coding activities on leisure time"
+          ]
+        },
+        {
+          "name": "working",
+          "type": "working",
+          "items": ["Fix bugs", "Make demos"]
+        },
+        {
+          "name": "done",
+          "type": "done",
+          "items": ["Release Muuri v0.9.0"]
+        }
+      ]
+    </script>
+
+    <script type="module">
+      import { h, html, render, Component } from 'https://cdn.skypack.dev/spux'
+      import 'https://cdn.skypack.dev/dior'
+      import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
+
+      var id = 'data'
+
       document.addEventListener('DOMContentLoaded', function () {
         const dragContainer = document.querySelector('.drag-container')
         const boardContainer = document.querySelector(
@@ -85,26 +114,7 @@
         // CREATE INITIAL COLUMN GRIDS
         //
 
-        ;[
-          {
-            name: 'to do',
-            type: 'todo',
-            items: [
-              "Figure out how to get more sponsors to support Muuri's development",
-              'Prioritize non-coding activities on leisure time'
-            ]
-          },
-          {
-            name: 'working',
-            type: 'working',
-            items: ['Fix bugs', 'Make demos']
-          },
-          {
-            name: 'done',
-            type: 'done',
-            items: ['Release Muuri v0.9.0']
-          }
-        ].forEach(({ name, type, items }, i) => {
+        di[id].forEach(({ name, type, items }, i) => {
           window.setTimeout(() => {
             addCol(name, type, grid => {
               items.reverse().forEach((item, i) => {
