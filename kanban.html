@@ -321,6 +321,8 @@
                     style.width = ''
                     style.height = ''
                     grid.refreshItems([item])
+                    console.log('dragReleaseEnd')
+                    serializeGrid()
                   })
                   .on('layoutEnd', () => {
                     boardGrid.layout()
