@@ -285,7 +285,7 @@
     columnGrids?.map((i, x) => {
       i._items.map((j, y) => {
         console.log(j._element.innerText, x, y)
-        di[id][x + 1].item.push(j._element.innerText)
+        di[id][x + 1].item.push({ title: j._element.innerText })
       })
     })
     console.log(di[id])
