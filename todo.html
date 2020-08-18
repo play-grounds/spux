@@ -162,6 +162,9 @@
 <script type="module">
   import { h, html, render, Component } from 'https://cdn.skypack.dev/spux'
   import 'https://cdn.skypack.dev/dior'
+  import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
+
+  var id = 'data'
 
   const Item = props => {
     return html`
@@ -173,7 +176,7 @@
     `
   }
 
-  console.log(di.data[1])
+  console.log(di[id][1])
 
   render(
     html`
@@ -181,10 +184,10 @@
       <div class="board">
         <div class="board-column todo">
           <div class="board-column-container">
-            <div class="board-column-header">${di.data[1].title}</div>
+            <div class="board-column-header">${di[id][1].title}</div>
             <div class="board-column-content-wrapper">
               <div class="board-column-content">
-                ${di.data[1].item?.map(i => {
+                ${di[id][1].item?.map(i => {
                   return html`
                     <${Item} title="${i.title}" />
                   `
@@ -195,10 +198,10 @@
         </div>
         <div class="board-column working">
           <div class="board-column-container">
-            <div class="board-column-header">${di.data[2].title}</div>
+            <div class="board-column-header">${di[id][2].title}</div>
             <div class="board-column-content-wrapper">
               <div class="board-column-content">
-                ${di.data[2].item?.map(i => {
+                ${di[id][2].item?.map(i => {
                   return html`
                     <${Item} title="${i.title}" />
                   `
@@ -209,10 +212,10 @@
         </div>
         <div class="board-column done">
           <div class="board-column-container">
-            <div class="board-column-header">${di.data[3].title}</div>
+            <div class="board-column-header">${di[id][3].title}</div>
             <div class="board-column-content-wrapper">
               <div class="board-column-content">
-                ${di.data[3].item?.map(i => {
+                ${di[id][3].item?.map(i => {
                   return html`
                     <${Item} title="${i.title}" />
                   `
@@ -231,6 +234,7 @@
     document.querySelectorAll('.board-column-content')
   )
   var columnGrids = []
+  globalThis.columnGrids = columnGrids
   var boardGrid
 
   // Init the column grids so we can drag those items around.
@@ -252,6 +256,7 @@
       }
     })
       .on('dragInit', function (item) {
+        console.log('init')
         item.getElement().style.width = item.getWidth() + 'px'
         item.getElement().style.height = item.getHeight() + 'px'
       })
@@ -259,13 +264,34 @@
         item.getElement().style.width = ''
         item.getElement().style.height = ''
         item.getGrid().refreshItems([item])
+        // console.log('dragReleaseEnd', item)
+        console.log('dragReleaseEnd')
+        serializeGrid(columnGrids)
       })
       .on('layoutStart', function () {
         boardGrid.refreshItems().layout()
       })
+      .on('move', function (data) {
+        // console.log('boardGrid', boardGrid.getItems())
+      })
 
     columnGrids.push(grid)
   })
+
+  function serializeGrid (columnGrids) {
+    di[id][1].item = []
+    di[id][2].item = []
+    di[id][3].item = []
+    columnGrids?.map((i, x) => {
+      i._items.map((j, y) => {
+        console.log(j._element.innerText, x, y)
+        di[id][x + 1].item.push(j._element.innerText)
+      })
+    })
+    console.log(di[id])
+    updateThis(id)
+    // console.log('searialize', columnGrids)
+  }
 
   // Init board grid so we can drag those columns around.
   boardGrid = new Muuri('.board', {
