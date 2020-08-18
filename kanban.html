@@ -50,7 +50,9 @@
             i._items.map((j, y) => {
               // console.log(j)
               // console.log(j._element)
-              di[id][x].items.push(j._element?.innerText)
+              let text = j._element?.innerText
+              if (text.match(/^\n/)) return
+              di[id][x].items.push(text)
             })
           })
           console.log('data island')
