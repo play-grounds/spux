@@ -46,10 +46,10 @@
           di[id][1].items = []
           di[id][2].items = []
           boardGrid?._items?.map((i, x) => {
-            let text = i._element.innerText.split('\n').reverse()
+            let text = i._element.innerText.split('\n')
             console.log(text, x)
             di[id][x].name = text[0]
-            di[id][x].items = text.slice(1)
+            di[id][x].items = text.slice(1).reverse()
           })
           console.log('di', di[id])
           updateThis(id)
