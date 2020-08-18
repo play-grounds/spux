@@ -40,6 +40,22 @@
 
       var id = 'data'
 
+      function serializeGrid () {
+        setTimeout(() => {
+          di[id][0].items = []
+          di[id][1].items = []
+          di[id][2].items = []
+          boardGrid?._items?.map((i, x) => {
+            let text = i._element.innerText.split('\n')
+            console.log(text, x)
+            di[id][x].name = text[0]
+            di[id][x].items = text.slice(1)
+          })
+          console.log('di', di[id])
+          updateThis(id)
+        }, 500)
+      }
+
       document.addEventListener('DOMContentLoaded', function () {
         const dragContainer = document.querySelector('.drag-container')
         const boardContainer = document.querySelector(
@@ -56,7 +72,7 @@
         // INIT BOARD GRID
         //
 
-        const boardGrid = new Muuri(board, {
+        globalThis.boardGrid = new Muuri(board, {
           layoutDuration: 300,
           layoutEasing: 'cubic-bezier(0.625, 0.225, 0.100, 0.890)',
           layout: (grid, layoutId, items, width, height, callback) => {
@@ -108,6 +124,7 @@
               board.style.width = ''
               board.style.overflow = ''
             }
+            console.log('dragReleaseEnd')
           })
 
         //
@@ -148,6 +165,7 @@
               selectedTitleElem.blur()
               selectedItemElem = null
               selectedTitleElem = null
+              serializeGrid()
             }
 
             if (activate) {
@@ -158,6 +176,7 @@
               selectedTitleElem.setAttribute('focusable', true)
               selectedTitleElem.setAttribute('tabindex', 0)
               selectedTitleElem.focus()
+              serializeGrid()
             }
           }
         })
@@ -172,7 +191,8 @@
               if (acc) return acc
               return grid.getElement() === gridElem ? grid : undefined
             }, undefined)
-            addColItem(grid, 'Hello world!')
+            addColItem(grid, 'New Item')
+            serializeGrid()
           }
         })
 
@@ -191,6 +211,7 @@
               }
             })
           }
+          serializeGrid()
         })
 
         // Update layout when title is modified.
@@ -211,6 +232,7 @@
               grid.layout()
             }
           }
+          serializeGrid()
         })
 
         //
