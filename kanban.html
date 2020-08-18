@@ -46,7 +46,7 @@
           di[id][1].items = []
           di[id][2].items = []
           boardGrid?._items?.map((i, x) => {
-            let text = i._element.innerText.split('\n')
+            let text = i._element.innerText.split('\n').reverse()
             console.log(text, x)
             di[id][x].name = text[0]
             di[id][x].items = text.slice(1)
