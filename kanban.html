@@ -48,13 +48,16 @@
 
           colGrids?.map((i, x) => {
             i._items.map((j, y) => {
-              console.log(j)
-              console.log(j._element)
+              // console.log(j)
+              // console.log(j._element)
               di[id][x].items.push(j._element?.innerText)
             })
           })
-          console.log(di[id])
-          updateThis(id)
+          console.log('data island')
+          console.log(di[id][0].items)
+          console.log(di[id][1].items)
+          console.log(di[id][2].items)
+          // updateThis(id)
         }, 500)
       }
 
