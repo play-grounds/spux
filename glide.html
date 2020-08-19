@@ -51,19 +51,22 @@
 <script type="application/ld+json" id="data">
   [
     {
+      "@context": "http://schema.org",
       "@id": "#1",
-      "type": "Image",
-      "source": "https://source.unsplash.com/1600x900/?tree"
+      "@type": "Image",
+      "contentUrl": "https://source.unsplash.com/1600x900/?tree"
     },
     {
+      "@context": "http://schema.org",
       "@id": "#2",
-      "type": "Image",
-      "source": "https://source.unsplash.com/1600x900/?winter"
+      "@type": "ImageObject",
+      "contentUrl": "https://source.unsplash.com/1600x900/?winter"
     },
     {
+      "@context": "http://schema.org",
       "@id": "#3",
-      "type": "Image",
-      "source": "https://source.unsplash.com/1600x900/?forest"
+      "@type": "ImageObject",
+      "contentUrl": "https://source.unsplash.com/1600x900/?forest"
     }
   ]
 </script>
@@ -88,7 +91,7 @@
                 ${di.data.map(i => {
                   return html`
                     <li class="glide__slide">
-                      <img src="${i.source}" alt="img" />
+                      <img src="${i.contentUrl}" alt="img" />
                     </li>
                   `
                 })}
