@@ -16,7 +16,18 @@
       crossorigin="anonymous"
     />
     <script type="application/ld+json" id="data">
-      { "@id": "" }
+      [
+        { "@id": "" },
+        { "@id": "PostList", "posts": ["#post1", "#post2", "#post3"] },
+        {
+          "@id": "#post1",
+          "@type": "Post",
+          "author": "Tilo Mitra",
+          "title": "Hello from Toronto",
+          "description": "Hey, I just wanted to check in with you from Toronto. I got here earlier today.",
+          "avatar": "/img/common/tilo-avatar.png"
+        }
+      ]
     </script>
     <style>
       /*
@@ -296,6 +307,44 @@
       import 'https://cdn.skypack.dev/dior'
       import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
 
+      globalThis.findById = (id, arr) => {
+        arr = arr || di.data
+
+        return arr.find(a => {
+          if (a.children && a.children.length > 0) {
+            return a['@id'] === id ? true : findById(a.children, id)
+          } else {
+            return a['@id'] === id
+          }
+        })
+        return a
+      }
+
+      const Post = props => {
+        console.log(props.post)
+        return html`
+          <div class="email-item email-item-selected pure-g">
+            <div class="pure-u">
+              <img
+                width="64"
+                height="64"
+                alt="Tilo Mitra&#x27;s avatar"
+                class="email-avatar"
+                src="${props.post.avatar}"
+              />
+            </div>
+
+            <div class="pure-u-3-4">
+              <h5 class="email-name">${props.post.author}</h5>
+              <h4 class="email-subject">${props.post.title}</h4>
+              <p class="email-desc">
+                ${props.post.description}
+              </p>
+            </div>
+          </div>
+        `
+      }
+
       function renderAll () {
         render(
           html`
@@ -347,26 +396,7 @@
               </div>
 
               <div id="list" class="pure-u-1">
-                <div class="email-item email-item-selected pure-g">
-                  <div class="pure-u">
-                    <img
-                      width="64"
-                      height="64"
-                      alt="Tilo Mitra&#x27;s avatar"
-                      class="email-avatar"
-                      src="/img/common/tilo-avatar.png"
-                    />
-                  </div>
-
-                  <div class="pure-u-3-4">
-                    <h5 class="email-name">Tilo Mitra</h5>
-                    <h4 class="email-subject">Hello from Toronto</h4>
-                    <p class="email-desc">
-                      Hey, I just wanted to check in with you from Toronto. I
-                      got here earlier today.
-                    </p>
-                  </div>
-                </div>
+                <${Post} post=${findById('#post1')} />
 
                 <div class="email-item email-item-unread pure-g">
                   <div class="pure-u">
