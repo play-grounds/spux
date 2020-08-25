@@ -404,6 +404,16 @@
         return eval(type)(props)
       }
 
+      const Elements = props => {
+        return di.data
+          .filter(i => i['@type'] === props.type)
+          .map(i => {
+            return html`
+              <${Element} id=${i['@id']} />
+            `
+          })
+      }
+
       function renderAll () {
         render(
           html`
@@ -455,13 +465,7 @@
               </div>
 
               <div id="list" class="pure-u-1">
-                <${Element} id="#post1" />
-                <${Element} id="#post2" />
-                <${Element} id="#post3" />
-                <${Element} id="#post4" />
-                <${Element} id="#post5" />
-                <${Element} id="#post6" />
-                <${Element} id="#post7" />
+                <${Elements} type="Post" />
               </div>
 
               <div id="main" class="pure-u-1">
