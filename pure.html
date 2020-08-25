@@ -379,15 +379,15 @@
                 height="64"
                 alt="Tilo Mitra&#x27;s avatar"
                 class="email-avatar"
-                src="${props.post.avatar}"
+                src="${props.lo.avatar}"
               />
             </div>
 
             <div class="pure-u-3-4">
-              <h5 class="email-name">${props.post.author}</h5>
-              <h4 class="email-subject">${props.post.title}</h4>
+              <h5 class="email-name">${props.lo.author}</h5>
+              <h4 class="email-subject">${props.lo.title}</h4>
               <p class="email-desc">
-                ${props.post.description}
+                ${props.lo.description}
               </p>
             </div>
           </div>
@@ -399,6 +399,7 @@
         if (!lo) return
         var type = lo['@type']
         if (!type) return
+        props.lo = lo
 
         return eval(type)(props)
       }
@@ -454,13 +455,13 @@
               </div>
 
               <div id="list" class="pure-u-1">
-                <${Element} id="#post1" post=${findById('#post1')} />
-                <${Element} id="#post2" post=${findById('#post2')} />
-                <${Element} id="#post3" post=${findById('#post3')} />
-                <${Element} id="#post4" post=${findById('#post4')} />
-                <${Element} id="#post5" post=${findById('#post5')} />
-                <${Element} id="#post6" post=${findById('#post6')} />
-                <${Element} id="#post7" post=${findById('#post7')} />
+                <${Element} id="#post1" />
+                <${Element} id="#post2" />
+                <${Element} id="#post3" />
+                <${Element} id="#post4" />
+                <${Element} id="#post5" />
+                <${Element} id="#post6" />
+                <${Element} id="#post7" />
               </div>
 
               <div id="main" class="pure-u-1">
