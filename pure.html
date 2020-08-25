@@ -394,6 +394,15 @@
         `
       }
 
+      const Element = props => {
+        var lo = findById(props.id)
+        if (!lo) return
+        var type = lo['@type']
+        if (!type) return
+
+        return eval(type)(props)
+      }
+
       function renderAll () {
         render(
           html`
@@ -445,13 +454,13 @@
               </div>
 
               <div id="list" class="pure-u-1">
-                <${Post} post=${findById('#post1')} />
-                <${Post} post=${findById('#post2')} />
-                <${Post} post=${findById('#post3')} />
-                <${Post} post=${findById('#post4')} />
-                <${Post} post=${findById('#post5')} />
-                <${Post} post=${findById('#post6')} />
-                <${Post} post=${findById('#post7')} />
+                <${Element} id="#post1" post=${findById('#post1')} />
+                <${Element} id="#post2" post=${findById('#post2')} />
+                <${Element} id="#post3" post=${findById('#post3')} />
+                <${Element} id="#post4" post=${findById('#post4')} />
+                <${Element} id="#post5" post=${findById('#post5')} />
+                <${Element} id="#post6" post=${findById('#post6')} />
+                <${Element} id="#post7" post=${findById('#post7')} />
               </div>
 
               <div id="main" class="pure-u-1">
