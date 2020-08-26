@@ -209,6 +209,12 @@
 
       const NavBar = props => {
         var posts = di[id].filter(i => i['@type'] === props.type)
+        let folders = ['Important', 'Sent', 'Drafts', 'Trash']
+        var labels = [
+          { label: 'Personal', class: 'email-label-personal' },
+          { label: 'Work', class: 'email-label-work' },
+          { label: 'Travel', class: 'email-label-travel' }
+        ]
         return html`
           <div id="nav" class="pure-u">
             <a href="#" class="nav-menu-button">Menu</a>
@@ -224,34 +230,23 @@
                       <span class="email-count"> (${posts.length})</span></a
                     >
                   </li>
-                  <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link">Important</a>
-                  </li>
-                  <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link">Sent</a>
-                  </li>
-                  <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link">Drafts</a>
-                  </li>
-                  <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link">Trash</a>
-                  </li>
+                  ${folders.map(
+                    i => html`
+                      <li class="pure-menu-item">
+                        <a href="#" class="pure-menu-link">${i}</a>
+                      </li>
+                    `
+                  )}
                   <li class="pure-menu-heading">Labels</li>
-                  <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link"
-                      ><span class="email-label-personal"></span>Personal</a
-                    >
-                  </li>
-                  <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link"
-                      ><span class="email-label-work"></span>Work</a
-                    >
-                  </li>
-                  <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link"
-                      ><span class="email-label-travel"></span>Travel</a
-                    >
-                  </li>
+                  ${labels.map(
+                    i => html`
+                      <li class="pure-menu-item">
+                        <a href="#" class="pure-menu-link"
+                          ><span class="${i.class}"></span>${i.label}</a
+                        >
+                      </li>
+                    `
+                  )}
                 </ul>
               </div>
             </div>
