@@ -15,6 +15,7 @@
       integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ"
       crossorigin="anonymous"
     />
+
     <script type="application/ld+json" id="data">
       [
         { "@id": "" },
@@ -74,6 +75,10 @@
           "title": "Summary for April 3rd, 2020",
           "description": "We found 10 news articles that you may like.",
           "avatar": "/img/common/ynews-avatar.png"
+        },
+        {
+          "@id": "#ui",
+          "selected": "#post1"
         }
       ]
     </script>
@@ -371,8 +376,14 @@
 
       const Post = props => {
         console.log(props.post)
+        var selected = findById('#ui').selected
+        var visibility =
+          selected === props.lo['@id']
+            ? 'email-item-selected'
+            : 'email-item-unread'
+        console.log('selected', selected)
         return html`
-          <div class="email-item email-item-selected pure-g">
+          <div class="email-item pure-g ${visibility}">
             <div class="pure-u">
               <img
                 width="64"
