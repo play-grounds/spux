@@ -162,6 +162,7 @@
         return eval(type)(props)
       }
 
+      // id should be anyURI
       const Elements = props => {
         return spux
           .filter(i => i['@type'] === props.type)
