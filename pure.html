@@ -30,6 +30,7 @@
           "author": "Tilo Mitra",
           "title": "Hello from Toronto",
           "description": "Hey, I just wanted to check in with you from Toronto. I got here earlier today.",
+          "date": "3:56pm, April 3, 2012",
           "avatar": "https://purecss.io/img/common/tilo-avatar.png"
         },
         {
@@ -38,6 +39,7 @@
           "author": "Eric Ferraiuolo",
           "title": "Re: Pull Requests",
           "description": "Hey, I had some feedback for pull request #51. We should center the menu so it looks better on mobile.",
+          "date": "3:56pm, April 3, 2012",
           "avatar": "https://purecss.io/img/common/ericf-avatar.png"
         },
         {
@@ -46,6 +48,7 @@
           "author": "YUI Library",
           "title": "You have 5 bugs assigned to you",
           "description": "Duis aute irure dolor in reprehenderit in voluptate velit essecillum dolore eu fugiat nulla.",
+          "date": "3:56pm, April 3, 2012",
           "avatar": "https://purecss.io/img/common/yui-avatar.png"
         },
         {
@@ -54,6 +57,7 @@
           "author": "Reid Burke",
           "title": "Re: Design Language",
           "description": "DuExcepteur sint occaecat cupidatat non proident, sunt in culpa.",
+          "date": "3:56pm, April 3, 2012",
           "avatar": "https://purecss.io/img/common/reid-avatar.png"
         },
         {
@@ -62,6 +66,7 @@
           "author": "Andrew Wooldridge",
           "title": "YUI Blog Updates",
           "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+          "date": "3:56pm, April 3, 2012",
           "avatar": "https://purecss.io/img/common/andrew-avatar.png"
         },
         {
@@ -70,6 +75,7 @@
           "author": "Yahoo! Finance",
           "title": "How to protect your finances from winter storms",
           "description": "Mauris tempor mi vitae sem aliquet pharetra. Fusce in dui purus, nec malesuada mauris.",
+          "date": "3:56pm, April 3, 2012",
           "avatar": "https://purecss.io/img/common/yfinance-avatar.png"
         },
         {
@@ -78,6 +84,7 @@
           "author": "Yahoo! News",
           "title": "Summary for April 3rd, 2020",
           "description": "We found 10 news articles that you may like.",
+          "date": "3:56pm, April 3, 2012",
           "avatar": "https://purecss.io/img/common/ynews-avatar.png"
         },
         {
@@ -92,14 +99,16 @@
       import 'https://cdn.skypack.dev/dior'
       import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
 
-      globalThis.findById = (id, arr) => {
-        arr = arr || di.data
+      var id = 'data'
+
+      globalThis.findById = (subject, arr) => {
+        arr = arr || di[id]
 
         return arr.find(a => {
           if (a.children && a.children.length > 0) {
-            return a['@id'] === id ? true : findById(a.children, id)
+            return a['@id'] === subject ? true : findById(a.children, subject)
           } else {
-            return a['@id'] === id
+            return a['@id'] === subject
           }
         })
         return a
@@ -116,7 +125,7 @@
           <div
             class="email-item pure-g ${visibility}"
             onClick=${() => {
-              di.data[9].selected = props.lo['@id']
+              di[id][9].selected = props.lo['@id']
               renderAll()
             }}
           >
@@ -152,7 +161,7 @@
       }
 
       const Elements = props => {
-        return di.data
+        return di[id]
           .filter(i => i['@type'] === props.type)
           .map(i => {
             return html`
@@ -172,7 +181,7 @@
                 <h1 class="email-content-title">${message.title}</h1>
                 <p class="email-content-subtitle">
                   From <a>${message.author}</a>
-                  <span style="margin-left: 0.2em">3:56pm, April 3, 2012</span>
+                  <span style="margin-left: 0.2em">${message.date}</span>
                 </p>
               </div>
 
@@ -199,7 +208,7 @@
       }
 
       const NavBar = props => {
-        var posts = di.data.filter(i => i['@type'] === props.type)
+        var posts = di[id].filter(i => i['@type'] === props.type)
         return html`
           <div id="nav" class="pure-u">
             <a href="#" class="nav-menu-button">Menu</a>
