@@ -98,9 +98,10 @@
       import { h, html, render, Component } from 'https://cdn.skypack.dev/spux'
       import 'https://cdn.skypack.dev/dior'
       import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
+      import getj from 'https://unpkg.com/getj?module'
 
       var id = 'data'
-      var spux = di[id]
+      var spux
 
       globalThis.findById = (subject, arr) => {
         arr = arr || spux
@@ -271,7 +272,11 @@
         `
       }
 
-      globalThis.renderAll = () => {
+      async function renderAll () {
+        spux = di[id]
+        if (qs.uri) {
+          spux = await getj(qs.uri)
+        }
         render(h(App), document.body)
       }
       renderAll()
