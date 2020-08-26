@@ -100,9 +100,10 @@
       import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
 
       var id = 'data'
+      var spux = di[id]
 
       globalThis.findById = (subject, arr) => {
-        arr = arr || di[id]
+        arr = arr || spux
 
         return arr.find(a => {
           if (a.children && a.children.length > 0) {
@@ -125,7 +126,7 @@
           <div
             class="email-item pure-g ${visibility}"
             onClick=${() => {
-              di[id][9].selected = props.lo['@id']
+              spux[9].selected = props.lo['@id']
               renderAll()
             }}
           >
@@ -161,7 +162,7 @@
       }
 
       const Elements = props => {
-        return di[id]
+        return spux
           .filter(i => i['@type'] === props.type)
           .map(i => {
             return html`
@@ -208,7 +209,7 @@
       }
 
       const NavBar = props => {
-        var posts = di[id].filter(i => i['@type'] === props.type)
+        var posts = spux.filter(i => i['@type'] === props.type)
         let folders = ['Important', 'Sent', 'Drafts', 'Trash']
         var labels = [
           { label: 'Personal', class: 'email-label-personal' },
@@ -257,14 +258,14 @@
       const App = props => {
         return html`
           <div id="layout" class="content pure-g">
-            <${NavBar} type="Post" />
+            <${NavBar} />
 
             <div id="list" class="pure-u-1">
               <${Elements} type="Post" />
             </div>
 
             <div id="main" class="pure-u-1">
-              <${Message} type="Post" />
+              <${Message} />
             </div>
           </div>
         `
