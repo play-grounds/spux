@@ -210,13 +210,14 @@
       }
 
       const NavBar = props => {
-        var posts = spux.filter(i => i['@type'] === props.type)
+        var posts = spux.filter(i => i['@type'] === 'Post')
         let folders = ['Important', 'Sent', 'Drafts', 'Trash']
         var labels = [
           { label: 'Personal', class: 'email-label-personal' },
           { label: 'Work', class: 'email-label-work' },
           { label: 'Travel', class: 'email-label-travel' }
         ]
+        console.log('posts', posts)
         return html`
           <div id="nav" class="pure-u">
             <a href="#" class="nav-menu-button">Menu</a>
