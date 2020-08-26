@@ -382,7 +382,13 @@
             : 'email-item-unread'
         console.log('selected', selected)
         return html`
-          <div class="email-item pure-g ${visibility}">
+          <div
+            class="email-item pure-g ${visibility}"
+            onClick=${() => {
+              di.data[9].selected = props.lo['@id']
+              renderAll()
+            }}
+          >
             <div class="pure-u">
               <img
                 width="64"
@@ -432,9 +438,9 @@
           <div class="email-content">
             <div class="email-content-header pure-g">
               <div class="pure-u-1-2">
-                <h1 class="email-content-title">Hello from Toronto</h1>
+                <h1 class="email-content-title">${message.title}</h1>
                 <p class="email-content-subtitle">
-                  From <a>Tilo Mitra</a> at
+                  From <a>${message.author}</a> at
                   <span>3:56pm, April 3, 2012</span>
                 </p>
               </div>
@@ -461,7 +467,7 @@
         `
       }
 
-      function renderAll () {
+      globalThis.renderAll = () => {
         render(
           html`
             <div id="layout" class="content pure-g">
