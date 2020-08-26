@@ -199,67 +199,76 @@
         `
       }
 
-      globalThis.renderAll = () => {
-        render(
-          html`
-            <div id="layout" class="content pure-g">
-              <div id="nav" class="pure-u">
-                <a href="#" class="nav-menu-button">Menu</a>
+      const NavBar = props => {
+        var posts = di.data.filter(i => i['@type'] === props.type)
+        return html`
+          <div id="nav" class="pure-u">
+            <a href="#" class="nav-menu-button">Menu</a>
 
-                <div class="nav-inner">
-                  <button class="primary-button pure-button">Compose</button>
+            <div class="nav-inner">
+              <button class="primary-button pure-button">Compose</button>
 
-                  <div class="pure-menu">
-                    <ul class="pure-menu-list">
-                      <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link"
-                          >Inbox <span class="email-count">(2)</span></a
-                        >
-                      </li>
-                      <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link">Important</a>
-                      </li>
-                      <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link">Sent</a>
-                      </li>
-                      <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link">Drafts</a>
-                      </li>
-                      <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link">Trash</a>
-                      </li>
-                      <li class="pure-menu-heading">Labels</li>
-                      <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link"
-                          ><span class="email-label-personal"></span>Personal</a
-                        >
-                      </li>
-                      <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link"
-                          ><span class="email-label-work"></span>Work</a
-                        >
-                      </li>
-                      <li class="pure-menu-item">
-                        <a href="#" class="pure-menu-link"
-                          ><span class="email-label-travel"></span>Travel</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <div id="list" class="pure-u-1">
-                <${Elements} type="Post" />
-              </div>
-
-              <div id="main" class="pure-u-1">
-                <${Message} type="Post" />
+              <div class="pure-menu">
+                <ul class="pure-menu-list">
+                  <li class="pure-menu-item">
+                    <a href="#" class="pure-menu-link"
+                      >Inbox
+                      <span class="email-count"> (${posts.length})</span></a
+                    >
+                  </li>
+                  <li class="pure-menu-item">
+                    <a href="#" class="pure-menu-link">Important</a>
+                  </li>
+                  <li class="pure-menu-item">
+                    <a href="#" class="pure-menu-link">Sent</a>
+                  </li>
+                  <li class="pure-menu-item">
+                    <a href="#" class="pure-menu-link">Drafts</a>
+                  </li>
+                  <li class="pure-menu-item">
+                    <a href="#" class="pure-menu-link">Trash</a>
+                  </li>
+                  <li class="pure-menu-heading">Labels</li>
+                  <li class="pure-menu-item">
+                    <a href="#" class="pure-menu-link"
+                      ><span class="email-label-personal"></span>Personal</a
+                    >
+                  </li>
+                  <li class="pure-menu-item">
+                    <a href="#" class="pure-menu-link"
+                      ><span class="email-label-work"></span>Work</a
+                    >
+                  </li>
+                  <li class="pure-menu-item">
+                    <a href="#" class="pure-menu-link"
+                      ><span class="email-label-travel"></span>Travel</a
+                    >
+                  </li>
+                </ul>
               </div>
             </div>
-          `,
-          document.body
-        )
+          </div>
+        `
+      }
+
+      const App = props => {
+        return html`
+          <div id="layout" class="content pure-g">
+            <${NavBar} type="Post" />
+
+            <div id="list" class="pure-u-1">
+              <${Elements} type="Post" />
+            </div>
+
+            <div id="main" class="pure-u-1">
+              <${Message} type="Post" />
+            </div>
+          </div>
+        `
+      }
+
+      globalThis.renderAll = () => {
+        render(h(App), document.body)
       }
       renderAll()
     </script>
