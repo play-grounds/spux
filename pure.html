@@ -155,7 +155,7 @@
       const Element = props => {
         var lo = findById(props.id)
         if (!lo) return
-        var type = lo['@type']
+        var type = props.view || lo['@type']
         if (!type) return
         props.lo = lo
 
@@ -165,7 +165,7 @@
       // id should be anyURI
       const Elements = props => {
         return spux
-          .filter(i => i['@type'] === props.type)
+          .filter(i => i['@type'] === props.view)
           .map(i => {
             return html`
               <${Element} id=${i['@id']} />
@@ -259,16 +259,18 @@
       }
 
       const App = props => {
+        var selected = findById('#ui').selected
+
         return html`
           <div id="layout" class="content pure-g">
             <${NavBar} />
 
             <div id="list" class="pure-u-1">
-              <${Elements} type="Post" />
+              <${Elements} view="Post" />
             </div>
 
             <div id="main" class="pure-u-1">
-              <${Message} />
+              <${Element} id="${selected}" view="Message" />
             </div>
           </div>
         `
