@@ -128,12 +128,7 @@
           if (this.props.id.match(/^#/)) {
             var lo = findById(this.props.id)
           } else if (this.props.id.match(/^http/)) {
-            var doc = await getj(this.props.id)
-            console.log('doc', doc)
-            var fragid = '#' + this.props.id.split('#').pop()
-            console.log('fragid', fragid)
-            var lo = findById(fragid, doc)
-            console.log('lo', lo)
+            var lo = await getj(this.props.id)
           }
 
           // get type
@@ -142,6 +137,7 @@
           // add linked object to props
           this.props.lo = lo
 
+          var component = Pre
           // get component
           try {
             console.log('type', type)
@@ -151,11 +147,10 @@
             } else {
               var component = Pre
             }
-
-            this.setState({ lo: lo, type: type, component: component })
           } catch (e) {
             console.log('error', e)
           }
+          this.setState({ lo: lo, type: type, component: component })
         }
 
         render () {
@@ -314,6 +309,10 @@
 
       async function renderAll () {
         spux = di[id]
+        // var test1 = await getj(
+        //   'https://play-grounds.github.io/spux/pure.html#post2'
+        // )
+        // console.log('test1', test1)
         if (qs.uri) {
           spux = await getj(qs.uri)
         }
