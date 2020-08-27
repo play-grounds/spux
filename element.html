@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A layout example that shows off a responsive email layout."
+    />
+    <title>Email App</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/purecss@2.0.3/build/pure-min.css"
+      integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://play-grounds.github.io/spux/css/pure.css"
+    />
+
+    <script type="application/ld+json" id="data">
+      [
+        { "@id": "" },
+        { "@id": "PostList", "posts": ["#post1", "#post2", "#post3"] },
+        {
+          "@id": "#post1",
+          "@type": "Post",
+          "author": "Tilo Mitra",
+          "title": "Hello from Toronto",
+          "description": "Hey, I just wanted to check in with you from Toronto. I got here earlier today.",
+          "date": "3:56pm, April 3, 2012",
+          "avatar": "https://purecss.io/img/common/tilo-avatar.png"
+        },
+        {
+          "@id": "#post2",
+          "@type": "Post",
+          "author": "Eric Ferraiuolo",
+          "title": "Re: Pull Requests",
+          "description": "Hey, I had some feedback for pull request #51. We should center the menu so it looks better on mobile.",
+          "date": "3:56pm, April 3, 2012",
+          "avatar": "https://purecss.io/img/common/ericf-avatar.png"
+        },
+        {
+          "@id": "#post3",
+          "@type": "Post",
+          "author": "YUI Library",
+          "title": "You have 5 bugs assigned to you",
+          "description": "Duis aute irure dolor in reprehenderit in voluptate velit essecillum dolore eu fugiat nulla.",
+          "date": "3:56pm, April 3, 2012",
+          "avatar": "https://purecss.io/img/common/yui-avatar.png"
+        },
+        {
+          "@id": "#post4",
+          "@type": "Post",
+          "author": "Reid Burke",
+          "title": "Re: Design Language",
+          "description": "DuExcepteur sint occaecat cupidatat non proident, sunt in culpa.",
+          "date": "3:56pm, April 3, 2012",
+          "avatar": "https://purecss.io/img/common/reid-avatar.png"
+        },
+        {
+          "@id": "#post5",
+          "@type": "Post",
+          "author": "Andrew Wooldridge",
+          "title": "YUI Blog Updates",
+          "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+          "date": "3:56pm, April 3, 2012",
+          "avatar": "https://purecss.io/img/common/andrew-avatar.png"
+        },
+        {
+          "@id": "#post6",
+          "@type": "Post",
+          "author": "Yahoo! Finance",
+          "title": "How to protect your finances from winter storms",
+          "description": "Mauris tempor mi vitae sem aliquet pharetra. Fusce in dui purus, nec malesuada mauris.",
+          "date": "3:56pm, April 3, 2012",
+          "avatar": "https://purecss.io/img/common/yfinance-avatar.png"
+        },
+        {
+          "@id": "#post7",
+          "@type": "Post",
+          "author": "Yahoo! News",
+          "title": "Summary for April 3rd, 2020",
+          "description": "We found 10 news articles that you may like.",
+          "date": "3:56pm, April 3, 2012",
+          "avatar": "https://purecss.io/img/common/ynews-avatar.png"
+        },
+        {
+          "@id": "#ui",
+          "selected": "#post1"
+        }
+      ]
+    </script>
+
+    <script type="module">
+      import { h, html, render, Component } from 'https://cdn.skypack.dev/spux'
+      import 'https://cdn.skypack.dev/dior'
+      import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
+      import getj from 'https://unpkg.com/getj?module'
+      // import Element from './components/Element.js'
+
+      var id = 'data'
+      var spux
+
+      globalThis.findById = (subject, arr) => {
+        arr = arr || spux
+
+        return arr.find(a => {
+          if (a.children && a.children.length > 0) {
+            return a['@id'] === subject ? true : findById(a.children, subject)
+          } else {
+            return a['@id'] === subject
+          }
+        })
+        return a
+      }
+
+      const Post = props => {
+        var selected = findById('#ui').selected
+        var visibility =
+          selected === props.lo['@id']
+            ? 'email-item-selected'
+            : 'email-item-unread'
+        console.log('selected', selected)
+        return html`
+          <div
+            class="email-item pure-g ${visibility}"
+            onClick=${() => {
+              spux[9].selected = props.lo['@id']
+              renderAll()
+            }}
+          >
+            <div class="pure-u">
+              <img
+                width="64"
+                height="64"
+                alt="${props.lo.avatar}"
+                class="email-avatar"
+                src="${props.lo.avatar}"
+              />
+            </div>
+
+            <div class="pure-u-3-4">
+              <h5 class="email-name">${props.lo.author}</h5>
+              <h4 class="email-subject">${props.lo.title}</h4>
+              <p class="email-desc">
+                ${props.lo.description}
+              </p>
+            </div>
+          </div>
+        `
+      }
+
+      class Element extends Component {
+        constructor (props) {
+          super(props)
+        }
+
+        async componentDidMount () {
+          // get linked object
+          if (this.props.id.match(/^#/)) {
+            var lo = findById(this.props.id)
+          } else if (this.props.id.match(/^http/)) {
+            var doc = await getj(this.props.id)
+            console.log('doc', doc)
+            var fragid = '#' + this.props.id.split('#').pop()
+            console.log('fragid', fragid)
+            var lo = findById(fragid, doc)
+          }
+
+          // get type
+          var type = this.props.view || lo['@type']
+
+          // add linked object to props
+          this.props.lo = lo
+
+          // get component
+          var component = eval(type)
+
+          this.setState({ lo: lo, type: type, component: component })
+        }
+
+        render () {
+          if (this.state.lo && this.state.type && this.state.component) {
+            this.props.lo = this.state.lo
+            return this.state.component(this.props)
+          }
+        }
+      }
+
+      // id should be anyURI
+      const Elements = props => {
+        return spux
+          .filter(i => i['@type'] === props.view)
+          .map(i => {
+            return html`
+              <${Element} id=${i['@id']} />
+            `
+          })
+      }
+
+      const Message = props => {
+        var selected = findById('#ui').selected
+        var message = findById(selected)
+        console.log('message', message)
+        return html`
+          <div class="email-content">
+            <div class="email-content-header pure-g">
+              <div class="pure-u-1-2">
+                <h1 class="email-content-title">${message.title}</h1>
+                <p class="email-content-subtitle">
+                  From <a>${message.author}</a>
+                  <span style="margin-left: 0.2em">${message.date}</span>
+                </p>
+              </div>
+
+              <div class="email-content-controls pure-u-1-2">
+                <button class="secondary-button pure-button">
+                  Reply
+                </button>
+                <button class="secondary-button pure-button">
+                  Forward
+                </button>
+                <button class="secondary-button pure-button">
+                  Move to
+                </button>
+              </div>
+            </div>
+
+            <div class="email-content-body">
+              <p>
+                ${message.description}.
+              </p>
+            </div>
+          </div>
+        `
+      }
+
+      const NavBar = props => {
+        var posts = spux.filter(i => i['@type'] === 'Post')
+        let folders = ['Important', 'Sent', 'Drafts', 'Trash']
+        var labels = [
+          { label: 'Personal', class: 'email-label-personal' },
+          { label: 'Work', class: 'email-label-work' },
+          { label: 'Travel', class: 'email-label-travel' }
+        ]
+        console.log('posts', posts)
+        return html`
+          <div id="nav" class="pure-u">
+            <a href="#" class="nav-menu-button">Menu</a>
+
+            <div class="nav-inner">
+              <button class="primary-button pure-button">Compose</button>
+
+              <div class="pure-menu">
+                <ul class="pure-menu-list">
+                  <li class="pure-menu-item">
+                    <a href="#" class="pure-menu-link"
+                      >Inbox
+                      <span class="email-count"> (${posts.length})</span></a
+                    >
+                  </li>
+                  ${folders.map(
+                    i => html`
+                      <li class="pure-menu-item">
+                        <a href="#" class="pure-menu-link">${i}</a>
+                      </li>
+                    `
+                  )}
+                  <li class="pure-menu-heading">Labels</li>
+                  ${labels.map(
+                    i => html`
+                      <li class="pure-menu-item">
+                        <a href="#" class="pure-menu-link"
+                          ><span class="${i.class}"></span>${i.label}</a
+                        >
+                      </li>
+                    `
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+        `
+      }
+
+      const App = props => {
+        var selected = findById('#ui').selected
+
+        return html`
+          <div id="layout" class="content pure-g">
+            <div id="main" class="pure-u-1">
+              <${Element}
+                id=${'https://play-grounds.github.io/spux/pure.html#post2'}
+                view="Message"
+              />
+            </div>
+          </div>
+        `
+      }
+
+      async function renderAll () {
+        spux = di[id]
+        if (qs.uri) {
+          spux = await getj(qs.uri)
+        }
+        render(h(App), document.body)
+      }
+      renderAll()
+    </script>
+  </head>
+  <body></body>
+</html>
