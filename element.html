@@ -117,48 +117,13 @@
         return a
       }
 
-      const Post = props => {
-        var selected = findById('#ui').selected
-        var visibility =
-          selected === props.lo['@id']
-            ? 'email-item-selected'
-            : 'email-item-unread'
-        console.log('selected', selected)
-        return html`
-          <div
-            class="email-item pure-g ${visibility}"
-            onClick=${() => {
-              spux[9].selected = props.lo['@id']
-              renderAll()
-            }}
-          >
-            <div class="pure-u">
-              <img
-                width="64"
-                height="64"
-                alt="${props.lo.avatar}"
-                class="email-avatar"
-                src="${props.lo.avatar}"
-              />
-            </div>
-
-            <div class="pure-u-3-4">
-              <h5 class="email-name">${props.lo.author}</h5>
-              <h4 class="email-subject">${props.lo.title}</h4>
-              <p class="email-desc">
-                ${props.lo.description}
-              </p>
-            </div>
-          </div>
-        `
-      }
-
       class Element extends Component {
         constructor (props) {
           super(props)
         }
 
         async componentDidMount () {
+          console.log('componentDidMount')
           // get linked object
           if (this.props.id.match(/^#/)) {
             var lo = findById(this.props.id)
@@ -178,12 +143,23 @@
           this.props.lo = lo
 
           // get component
-          var component = eval(type)
+          try {
+            console.log('type', type)
+            console.log('eval type', eval(type))
+            if (type && eval(type)) {
+              var component = eval(type)
+            } else {
+              var component = Pre
+            }
 
-          this.setState({ lo: lo, type: type, component: component })
+            this.setState({ lo: lo, type: type, component: component })
+          } catch (e) {
+            console.log('error', e)
+          }
         }
 
         render () {
+          console.log('render')
           if (this.state.lo && this.state.type && this.state.component) {
             this.props.lo = this.state.lo
             return this.state.component(this.props)
@@ -202,7 +178,39 @@
           })
       }
 
-      const Message = props => {
+      const Pre = props => {
+        var message = props.lo
+        return html`
+          <div class="email-content">
+            <div class="email-content-header pure-g">
+              <div class="pure-u-1-2">
+                <h1 class="email-content-title">Raw Data</h1>
+              </div>
+
+              <div class="email-content-controls pure-u-1-2">
+                <button class="secondary-button pure-button">
+                  New
+                </button>
+                <button class="secondary-button pure-button">
+                  Edit
+                </button>
+                <button class="secondary-button pure-button">
+                  Save
+                </button>
+              </div>
+            </div>
+
+            <div class="email-content-body">
+              <pre>
+                ${JSON.stringify(message, null, 2)}.
+              </pre
+              >
+            </div>
+          </div>
+        `
+      }
+
+      const Post = props => {
         var selected = findById('#ui').selected
         var message = findById(selected)
         console.log('message', message)
@@ -297,7 +305,7 @@
               <${Element}
                 id=${qs.uri ||
                   'https://play-grounds.github.io/spux/pure.html#post2'}
-                view="Message"
+                view="Pre"
               />
             </div>
           </div>
