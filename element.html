@@ -168,6 +168,7 @@
             var fragid = '#' + this.props.id.split('#').pop()
             console.log('fragid', fragid)
             var lo = findById(fragid, doc)
+            console.log('lo', lo)
           }
 
           // get type
@@ -205,6 +206,7 @@
         var selected = findById('#ui').selected
         var message = findById(selected)
         console.log('message', message)
+        message = props.lo
         return html`
           <div class="email-content">
             <div class="email-content-header pure-g">
@@ -293,7 +295,8 @@
           <div id="layout" class="content pure-g">
             <div id="main" class="pure-u-1">
               <${Element}
-                id=${'https://play-grounds.github.io/spux/pure.html#post2'}
+                id=${qs.uri ||
+                  'https://play-grounds.github.io/spux/pure.html#post2'}
                 view="Message"
               />
             </div>
