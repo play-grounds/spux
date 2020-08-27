@@ -99,6 +99,7 @@
       import 'https://cdn.skypack.dev/dior'
       import updateThis from 'https://unpkg.com/spux-modules/updatethis.js'
       import getj from 'https://unpkg.com/getj?module'
+      // import Element from './components/Element.js'
 
       var id = 'data'
       var spux
@@ -152,14 +153,40 @@
         `
       }
 
-      const Element = props => {
-        var lo = findById(props.id)
-        if (!lo) return
-        var type = props.view || lo['@type']
-        if (!type) return
-        props.lo = lo
+      class Element extends Component {
+        constructor (props) {
+          super(props)
+        }
 
-        return eval(type)(props)
+        async componentDidMount () {
+          // get linked object
+          if (this.props.id.match(/^#/)) {
+            var lo = findById(this.props.id)
+          } else if (this.props.id.match(/^http/)) {
+            var doc = await getj(this.props.id)
+            console.log('doc', doc)
+            var fragid = '#' + this.props.id.split('#').pop()
+            console.log('fragid', fragid)
+            var lo = findById(fragid, doc)
+          }
+
+          // get type
+          var type = this.props.view || lo['@type']
+
+          // add linked object to props
+          this.props.lo = lo
+
+          // get component
+          var component = eval(type)
+
+          this.setState({ lo: lo, type: type, component: component })
+        }
+
+        render () {
+          if (this.state.lo && this.state.type && this.state.component) {
+            return this.state.component(this.props)
+          }
+        }
       }
 
       // id should be anyURI
@@ -270,7 +297,10 @@
             </div>
 
             <div id="main" class="pure-u-1">
-              <${Element} id="${selected}" view="Message" />
+              <${Element}
+                id="https://play-grounds.github.io/spux/pure.html#post1"
+                view="Message"
+              />
             </div>
           </div>
         `
