@@ -184,6 +184,7 @@
 
         render () {
           if (this.state.lo && this.state.type && this.state.component) {
+            this.props.lo = this.state.lo
             return this.state.component(this.props)
           }
         }
@@ -297,10 +298,7 @@
             </div>
 
             <div id="main" class="pure-u-1">
-              <${Element}
-                id="https://play-grounds.github.io/spux/pure.html#post1"
-                view="Message"
-              />
+              <${Element} id=${selected} view="Message" />
             </div>
           </div>
         `
