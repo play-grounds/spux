@@ -1,0 +1,83 @@
+<link
+  href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
+  rel="stylesheet"
+/>
+
+<script
+  type="application/json"
+  src="https://etleneum.com/~/contracts"
+  id="data"
+></script>
+<script type="module">
+  var id = 'data'
+  import Grid from 'https://jspm.dev/gridjs'
+  ;(() => {
+    globalThis.qs = Object.fromEntries(
+      new URLSearchParams(document.location.search)
+    )
+    globalThis.di = new Proxy(
+      Array.from(
+        document.querySelectorAll(
+          '[type="application/ld+json"], [type="application/json"]'
+        )
+      )
+        .map(island => [
+          island.id,
+          JSON.parse(island.text || JSON.stringify(''))
+        ])
+        .reduce((obj, item) => {
+          obj[item[0]] = item[1]
+          return obj
+        }, {}),
+      {
+        set: (obj, prop, value) => {
+          obj[prop] = value
+          var island = document.getElementById(prop)
+          island.text = JSON.stringify(value, null, 2)
+          return true
+        }
+      }
+    )
+  })()
+
+  var el = document.getElementById(id)
+  var src = el.src
+
+  async function fetchSrc () {
+    await window
+      .fetch(el.src, { headers: { Accept: el.type } })
+      .then(response => response.json())
+      .then(json => {
+        console.log('json', json)
+        if (json) {
+          console.log('updating di.' + id)
+          di[id] = json.value
+        }
+      })
+  }
+
+  async function main () {
+    await fetchSrc()
+
+    var index = {}
+
+    var columns = Object.keys([].concat(di.data)[0])
+    var values = [].concat(di.data).map(Object.values)
+
+    const grid = new Grid.Grid({
+      columns: columns,
+      data: values,
+      pagination: true,
+      sort: true,
+      search: true
+    }).render(document.getElementById('wrapper'))
+
+    console.table(di.data)
+  }
+
+  main()
+</script>
+
+<body>
+  <div id="wrapper"></div>
+</body>
