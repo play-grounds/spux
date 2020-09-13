@@ -1,5 +1,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gun/lib/webrtc.js"></script>
+
 <script type="application/ld+json" id="data">
   {
     "@id": "#1",
@@ -17,7 +19,7 @@
   let start
 
   console.log(Gun)
-  var gun = Gun()
+  var gun = Gun('wss://melvincarvalho.com:3000/gun')
   var user = gun.user()
   var username = 'https://example.com/forever'
   user.create(username, 'forever')
@@ -34,16 +36,13 @@
     console.log('ack', ack)
   })
 
-  gun
-    .get(username)
-    .get('num')
-    .on(d => {
-      data = d
-      console.log('data')
-    })
+  gun.get(username).on(d => {
+    data = d
+    console.log('data', d)
+  })
   fps(function frame () {
     fps(frame, 16)
-    document.querySelector('body').innerText = data
+    document.querySelector('body').innerText = JSON.stringify(data.num, null, 2)
   }, 16)
 </script>
 
