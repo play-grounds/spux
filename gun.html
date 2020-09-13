@@ -1,0 +1,50 @@
+<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
+<script type="application/ld+json" id="data">
+  {
+    "@id": "#1",
+    "@type": "MediaObject",
+    "contentUrl": "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4",
+    "startTime": 0
+  }
+</script>
+<script type="module">
+  // imports
+  import 'https://unpkg.com/dior'
+  import { h, html, render, Component } from 'https://unpkg.com/spux?module'
+
+  const element = document.body
+  let start
+
+  console.log(Gun)
+  var gun = Gun()
+  var user = gun.user()
+  var username = 'https://example.com/forever'
+  user.create(username, 'forever')
+  if (!user) {
+    user.auth(username, 'forever')
+  }
+
+  console.log(user)
+
+  var data
+  var fps = window.requestAnimationFrame || setTimeout
+
+  gun.get(username).put({ num: Math.random() }, function (ack) {
+    console.log('ack', ack)
+  })
+
+  gun
+    .get(username)
+    .get('num')
+    .on(d => {
+      data = d
+      console.log('data')
+    })
+  fps(function frame () {
+    fps(frame, 16)
+    document.querySelector('body').innerText = data
+  }, 16)
+</script>
+
+<body></body>

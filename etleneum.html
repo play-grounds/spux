@@ -51,7 +51,10 @@
         console.log('json', json)
         if (json) {
           console.log('updating di.' + id)
-          di[id] = json.value
+          di[id] = json.value.map(i => {
+            i.id = './etleneum.html?uri=' + i.id
+            return i
+          })
         }
       })
   }
