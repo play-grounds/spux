@@ -1,0 +1,85 @@
+<head>
+  <style>
+    *,
+    *:after,
+    *:before {
+      box-sizing: border-box;
+    }
+    body,
+    html {
+      height: 100%;
+      background-color: black;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .center {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    ​ img {
+      height: 100%;
+      width: auto;
+    }
+  </style>
+  <title>Slide</title>
+</head>
+
+<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gun/lib/webrtc.js"></script>
+
+<script type="application/ld+json" id="data">
+  {
+    "@id": ""
+  }
+</script>
+<script type="module">
+  import { h, html, render, Component } from 'https://unpkg.com/spux?module'
+  import 'https://unpkg.com/dior'
+
+  globalThis.defaults = {
+    updates: 'ws://localhost:8765/gun',
+    user: 'test',
+    password: 'test',
+    key: 'pic',
+    value: 'loading'
+  }
+
+  globalThis.qs = Object.fromEntries(
+    new URLSearchParams(document.location.search)
+  )
+
+  globalThis.spux = { ...defaults, ...di.data, ...qs }
+
+  console.log(Gun)
+  var gun = Gun(spux.updates)
+  var user = gun.user()
+  var username = spux.user
+  user.create(spux.user, spux.password)
+  if (!user) {
+    user.auth(spux.user, spux.password)
+  }
+
+  var data
+
+  gun
+    .get(spux.user)
+    .get(spux.key)
+    .on(d => {
+      data = d
+      di.data.value = d
+      console.log('data', d)
+      render(
+        html`
+          <img class="center" src=${di.data.value} />
+        `,
+        document.body
+      )
+    })
+</script>
