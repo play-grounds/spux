@@ -1,0 +1,69 @@
+<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gun/lib/webrtc.js"></script>
+
+<script type="application/ld+json" id="data">
+  {
+    "@id": "#1",
+    "@type": "MediaObject",
+    "contentUrl": "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4",
+    "startTime": 0
+  }
+</script>
+
+<script type="application/ld+json" id="data">
+  {
+    "@id": "",
+    "updates": "",
+    "user": "",
+    "key": "",
+    "password": "",
+    "value": ""
+  }
+</script>
+<script type="module">
+  import { h, html, render, Component } from 'https://unpkg.com/spux?module'
+  import 'https://unpkg.com/dior'
+
+  globalThis.defaults = {
+    updates: 'wss://melvincarvalho.com:3000/gun',
+    user: 'test',
+    password: 'test',
+    key: 'date',
+    value: 'loading'
+  }
+
+  globalThis.qs = Object.fromEntries(
+    new URLSearchParams(document.location.search)
+  )
+
+  globalThis.spux = { ...defaults, ...di.data, ...qs }
+
+  console.log(Gun)
+  var gun = Gun(spux.updates)
+  var user = gun.user()
+  var username = spux.user
+  user.create(spux.user, spux.password)
+  if (!user) {
+    user.auth(spux.user, spux.password)
+  }
+
+  var data
+
+  gun
+    .get(spux.user)
+    .get(spux.key)
+    .on(d => {
+      data = d
+      di.data.value = d
+      console.log('data', d)
+      render(
+        html`
+          <div class="flex items-center">
+            ${di.data.value}
+          </div>
+        `,
+        document.body
+      )
+    })
+</script>
