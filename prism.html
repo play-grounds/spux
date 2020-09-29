@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/components/prism-json.min.js"></script>
+    <script type="application/ld+json" id="data">
+      [
+        {
+          "@id": "#1",
+          "type": "Balance",
+          "source": "https://melvincarvalho.com/#me",
+          "amount": 320,
+          "currency": "satoshi"
+        },
+        {
+          "@id": "#2",
+          "type": "Balance",
+          "source": "https://spuxbot.com/web#id",
+          "amount": 680,
+          "currency": "satoshi"
+        }
+      ]
+    </script>
+    <script type="module">
+      import { h, html, render, Component } from 'https://cdn.skypack.dev/spux'
+      import 'https://unpkg.com/dior'
+      document.head.insertAdjacentHTML(
+        'beforeend',
+        `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/themes/prism.min.css" />`
+      )
+
+      var str = `
+        <h1>test</h1>
+      `
+
+      function Inner () {
+        return str
+      }
+
+      var s = html([str])
+      render(
+        html`
+          <pre><code class="language-json">${JSON.stringify(
+            di.data,
+            null,
+            2
+          )}</code></pre>
+          ${s}
+        `,
+        document.body
+      )
+    </script>
+  </head>
+  <body></body>
+</html>
