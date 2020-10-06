@@ -29,13 +29,57 @@
   </style>
 </head>
 <script type="application/ld+json" id="data">
-  {
-    "@context": "https://schema.org",
-    "@type": "ImageObject",
-    "contentUrl": "https://external-preview.redd.it/nxaQl-HQ8fWifeklwiZBWZUQPPrCTJcMpyXaqvhNmq8.jpg?auto=webp&s=3f28d099216899f0f0c3a48c18149988d9db9d15",
-    "description": "Ash Dragon by Kitt Lapeña",
-    "name": "Ash Dragon by Kitt Lapeña"
-  }
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://external-preview.redd.it/nxaQl-HQ8fWifeklwiZBWZUQPPrCTJcMpyXaqvhNmq8.jpg?auto=webp&s=3f28d099216899f0f0c3a48c18149988d9db9d15",
+      "description": "Ash Dragon by Kitt Lapeña",
+      "name": "Ash Dragon by Kitt Lapeña"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://external-preview.redd.it/eM-Vr9QSvjM4VH7yo28vy2wokS-UojjMp3KDsgJsrHU.jpg?auto=webp&s=41a06a87db19b2059fb06a4bcbaed643c014239f",
+      "description": "The Last One by Greg Rutkowski",
+      "name": "The Last One by Greg Rutkowski"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://external-preview.redd.it/eM-Vr9QSvjM4VH7yo28vy2wokS-UojjMp3KDsgJsrHU.jpg?auto=webp&s=41a06a87db19b2059fb06a4bcbaed643c014239f",
+      "description": "Leviathan by Sandeep Karunakaran",
+      "name": "Leviathan by Sandeep Karunakaran"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://external-preview.redd.it/n9HXaPmoJkEkkPgkIw6_ioZCCsCEPJduTi4txVAW61U.jpg?auto=webp&s=a00c2711b2d6e2fddc3f63e1e7b352e22b918fad",
+      "description": "The Cycle by Artur Rosa",
+      "name": "The Cycle by Artur Rosa"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://i.redd.it/qt5vy525zxv41.jpg",
+      "description": "Sekiro. Dragon's Blood by Anato Finnstark",
+      "name": "Sekiro. Dragon's Blood by Anato Finnstark"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://i.redd.it/7afjxvhtk2451.jpg",
+      "description": "Arga: The Wisdom Of The Deep by Nathaniel Himawan",
+      "name": "Arga: The Wisdom Of The Deep by Nathaniel Himawan"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://i.redd.it/q05uph52gnf31.jpg",
+      "description": "Gargantuan Leviathan by Tapwin",
+      "name": "Gargantuan Leviathan by Tapwin"
+    }
+  ]
 </script>
 <script type="module">
   // imports
@@ -43,13 +87,20 @@
   import { h, html, render, Component } from 'https://unpkg.com/spux?module'
 
   // defaults
-  globalThis.defaults = {
-    '@id': '#1',
-    '@type': 'MediaObject',
-    contentUrl:
-      'https://external-preview.redd.it/nxaQl-HQ8fWifeklwiZBWZUQPPrCTJcMpyXaqvhNmq8.jpg?width=960&crop=smart&auto=webp&s=05c80a0bf7b1eaaa6cbf3d688fd663b365e34b47',
-    startTime: 0
-  }
+  globalThis.defaults = [
+    {
+      '@id': '#1',
+      '@type': 'MediaObject',
+      contentUrl:
+        'https://external-preview.redd.it/nxaQl-HQ8fWifeklwiZBWZUQPPrCTJcMpyXaqvhNmq8.jpg?width=960&crop=smart&auto=webp&s=05c80a0bf7b1eaaa6cbf3d688fd663b365e34b47'
+    },
+    {
+      '@id': '#2',
+      '@type': 'MediaObject',
+      contentUrl:
+        'https://external-preview.redd.it/eM-Vr9QSvjM4VH7yo28vy2wokS-UojjMp3KDsgJsrHU.jpg?auto=webp&s=41a06a87db19b2059fb06a4bcbaed643c014239f'
+    }
+  ]
 
   // init
   globalThis.spux = { ...defaults, ...di.data, ...qs }
@@ -57,7 +108,10 @@
   // render
   render(
     html`
-      <img class="center" src=${spux.contentUrl} />
+      <img
+        class="center"
+        src=${spux[Math.floor(Math.random() * di.data.length)].contentUrl}
+      />
     `,
     document.body
   )
