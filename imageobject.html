@@ -1,0 +1,64 @@
+<head>
+  <style>
+    *,
+    *:after,
+    *:before {
+      box-sizing: border-box;
+    }
+    body,
+    html {
+      height: 100%;
+      background-color: black;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .center {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    ​ img {
+      height: 100%;
+      width: auto;
+    }
+  </style>
+</head>
+<script type="application/ld+json" id="data">
+  {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    "contentUrl": "https://external-preview.redd.it/nxaQl-HQ8fWifeklwiZBWZUQPPrCTJcMpyXaqvhNmq8.jpg?auto=webp&s=3f28d099216899f0f0c3a48c18149988d9db9d15",
+    "description": "Ash Dragon by Kitt Lapeña",
+    "name": "Ash Dragon by Kitt Lapeña"
+  }
+</script>
+<script type="module">
+  // imports
+  import 'https://unpkg.com/dior'
+  import { h, html, render, Component } from 'https://unpkg.com/spux?module'
+
+  // defaults
+  globalThis.defaults = {
+    '@id': '#1',
+    '@type': 'MediaObject',
+    contentUrl:
+      'https://external-preview.redd.it/nxaQl-HQ8fWifeklwiZBWZUQPPrCTJcMpyXaqvhNmq8.jpg?width=960&crop=smart&auto=webp&s=05c80a0bf7b1eaaa6cbf3d688fd663b365e34b47',
+    startTime: 0
+  }
+
+  // init
+  globalThis.spux = { ...defaults, ...di.data, ...qs }
+
+  // render
+  render(
+    html`
+      <img class="center" src=${spux.contentUrl} />
+    `,
+    document.body
+  )
+</script>
