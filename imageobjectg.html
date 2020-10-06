@@ -105,7 +105,7 @@
     .on(data => {
       globalThis.data = data
       console.log('data', data)
-      di.data = JSON.parse(data)
+      di.data = [JSON.parse(data)]
       var current = Math.floor(Math.random() * di.data.length)
 
       renderAll()
@@ -176,7 +176,7 @@
   function renderAll () {
     render(
       html`
-        <img class="center" src=${spux[current].contentUrl} />
+        <img class="center" src=${di.data[current].contentUrl} />
       `,
       document.body
     )
