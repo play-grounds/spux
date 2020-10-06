@@ -102,11 +102,12 @@
   gun
     .get(username)
     .get(uri)
-    .on(d => {
-      data = d
+    .on(data => {
       globalThis.data = data
       console.log('data', data)
       di.data = JSON.parse(data)
+      var current = Math.floor(Math.random() * di.data.length)
+
       renderAll()
     })
 
