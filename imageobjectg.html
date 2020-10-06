@@ -1,6 +1,5 @@
 <head>
   <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gun/lib/webrtc.js"></script>
 
@@ -103,7 +102,7 @@
   gun
     .get(username)
     .get(uri)
-    .open(d => {
+    .on(d => {
       data = d
       globalThis.data = data
       console.log('data', data)
