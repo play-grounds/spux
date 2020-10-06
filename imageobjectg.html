@@ -98,6 +98,7 @@
   var user = gun.user()
   var username = 'test'
   var uri = 'https://json.rocks/image/current'
+  var current
 
   gun
     .get(username)
@@ -106,7 +107,7 @@
       globalThis.data = data
       console.log('data', data)
       di.data = [JSON.parse(data)]
-      var current = Math.floor(Math.random() * di.data.length)
+      current = Math.floor(Math.random() * di.data.length)
 
       renderAll()
     })
