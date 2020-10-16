@@ -24,7 +24,8 @@ const PRECACHE_URLS = [
   'styles.css',
   '../../styles/main.css',
   'demo.js',
-  'pwa.html'
+  'pwa.html',
+  'spux/pwa.html'
 ]
 
 // The install handler takes care of precaching the resources we always need.
