@@ -1,0 +1,203 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gun/lib/webrtc.js"></script>
+
+  <style>
+    *,
+    *:after,
+    *:before {
+      box-sizing: border-box;
+    }
+    body,
+    html {
+      height: 100%;
+      background-color: black;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .center {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    ​ img {
+      height: 100%;
+      width: auto;
+    }
+  </style>
+</head>
+<script type="application/ld+json" id="data">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://external-preview.redd.it/nxaQl-HQ8fWifeklwiZBWZUQPPrCTJcMpyXaqvhNmq8.jpg?auto=webp&s=3f28d099216899f0f0c3a48c18149988d9db9d15",
+      "description": "Ash Dragon by Kitt Lapeña",
+      "name": "Ash Dragon by Kitt Lapeña"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://external-preview.redd.it/eM-Vr9QSvjM4VH7yo28vy2wokS-UojjMp3KDsgJsrHU.jpg?auto=webp&s=41a06a87db19b2059fb06a4bcbaed643c014239f",
+      "description": "The Last One by Greg Rutkowski",
+      "name": "The Last One by Greg Rutkowski"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://external-preview.redd.it/eM-Vr9QSvjM4VH7yo28vy2wokS-UojjMp3KDsgJsrHU.jpg?auto=webp&s=41a06a87db19b2059fb06a4bcbaed643c014239f",
+      "description": "Leviathan by Sandeep Karunakaran",
+      "name": "Leviathan by Sandeep Karunakaran"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://external-preview.redd.it/n9HXaPmoJkEkkPgkIw6_ioZCCsCEPJduTi4txVAW61U.jpg?auto=webp&s=a00c2711b2d6e2fddc3f63e1e7b352e22b918fad",
+      "description": "The Cycle by Artur Rosa",
+      "name": "The Cycle by Artur Rosa"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://i.redd.it/qt5vy525zxv41.jpg",
+      "description": "Sekiro. Dragon's Blood by Anato Finnstark",
+      "name": "Sekiro. Dragon's Blood by Anato Finnstark"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://i.redd.it/7afjxvhtk2451.jpg",
+      "description": "Arga: The Wisdom Of The Deep by Nathaniel Himawan",
+      "name": "Arga: The Wisdom Of The Deep by Nathaniel Himawan"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "https://i.redd.it/q05uph52gnf31.jpg",
+      "description": "Gargantuan Leviathan by Tapwin",
+      "name": "Gargantuan Leviathan by Tapwin"
+    }
+  ]
+</script>
+<script type="module">
+  // imports
+  import 'https://unpkg.com/dior'
+  import { h, html, render, Component } from 'https://unpkg.com/spux?module'
+  // import 'https://cdn.skypack.dev/gun/gun'
+  // import 'https://cdn.skypack.dev/gun/sea'
+  // import 'https://cdn.skypack.dev/gun/lib/webrtc'
+  // import 'https://cdn.skypack.dev/gun/lib/open'
+
+  var gun = Gun('wss://melvincarvalho.com:3000/gun')
+  var user = gun.user()
+  var username = 'test'
+  var uri = 'https://json.rocks/image/current'
+  var current
+
+  gun
+    .get(username)
+    .get(uri)
+    .on(data => {
+      globalThis.data = data
+      console.log('data', data)
+      di.data = [JSON.parse(data)]
+      current = Math.floor(Math.random() * di.data.length)
+
+      renderAll()
+    })
+
+  // defaults
+  globalThis.defaults = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      contentUrl:
+        'https://external-preview.redd.it/nxaQl-HQ8fWifeklwiZBWZUQPPrCTJcMpyXaqvhNmq8.jpg?auto=webp&s=3f28d099216899f0f0c3a48c18149988d9db9d15',
+      description: 'Ash Dragon by Kitt Lapeña',
+      name: 'Ash Dragon by Kitt Lapeña'
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      contentUrl:
+        'https://external-preview.redd.it/eM-Vr9QSvjM4VH7yo28vy2wokS-UojjMp3KDsgJsrHU.jpg?auto=webp&s=41a06a87db19b2059fb06a4bcbaed643c014239f',
+      description: 'The Last One by Greg Rutkowski',
+      name: 'The Last One by Greg Rutkowski'
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      contentUrl:
+        'https://external-preview.redd.it/eM-Vr9QSvjM4VH7yo28vy2wokS-UojjMp3KDsgJsrHU.jpg?auto=webp&s=41a06a87db19b2059fb06a4bcbaed643c014239f',
+      description: 'Leviathan by Sandeep Karunakaran',
+      name: 'Leviathan by Sandeep Karunakaran'
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      contentUrl:
+        'https://external-preview.redd.it/n9HXaPmoJkEkkPgkIw6_ioZCCsCEPJduTi4txVAW61U.jpg?auto=webp&s=a00c2711b2d6e2fddc3f63e1e7b352e22b918fad',
+      description: 'The Cycle by Artur Rosa',
+      name: 'The Cycle by Artur Rosa'
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      contentUrl: 'https://i.redd.it/qt5vy525zxv41.jpg',
+      description: "Sekiro. Dragon's Blood by Anato Finnstark",
+      name: "Sekiro. Dragon's Blood by Anato Finnstark"
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      contentUrl: 'https://i.redd.it/7afjxvhtk2451.jpg',
+      description: 'Arga: The Wisdom Of The Deep by Nathaniel Himawan',
+      name: 'Arga: The Wisdom Of The Deep by Nathaniel Himawan'
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      contentUrl: 'https://i.redd.it/q05uph52gnf31.jpg',
+      description: 'Gargantuan Leviathan by Tapwin',
+      name: 'Gargantuan Leviathan by Tapwin'
+    }
+  ]
+  var current = Math.floor(Math.random() * di.data.length)
+
+  // init
+  globalThis.spux = { ...defaults, ...di.data, ...qs }
+
+  // render
+  function renderAll () {
+    render(
+      html`
+        <img class="center" src=${di.data[current].contentUrl} />
+      `,
+      document.body
+    )
+  }
+
+  renderAll()
+
+  document.addEventListener('keyup', function (e) {
+    if (
+      e.keyCode === 13 ||
+      e.keyCode === 32 ||
+      e.keyCode === 37 ||
+      e.keyCode === 39
+    )
+      current = (current + 1) % di.data.length
+    renderAll()
+  })
+
+  document.addEventListener('click', function (e) {
+    current = (current + 1) % di.data.length
+    renderAll()
+  })
+</script>
