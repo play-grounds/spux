@@ -15,7 +15,7 @@
     }
   ],
   "start_url": "/spux/pwa.html",
-  "display": "fullscreen",
+  "display": "browser",
   "theme_color": "#B12A34",
   "background_color": "#B12A34"
 }
