@@ -175,6 +175,11 @@
   // init
   globalThis.spux = { ...defaults, ...di.data, ...qs }
 
+  // service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('serviceworker.js')
+  }
+
   // render
   function renderAll () {
     render(
