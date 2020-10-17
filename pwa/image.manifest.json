@@ -4,7 +4,7 @@
   "description": "Progressive Web App for images.",
   "icons": [
     {
-      "src": "ls picons/advanced.svg",
+      "src": "icons/advanced.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
