@@ -4,12 +4,12 @@
   "description": "Progressive Web App for images.",
   "icons": [
     {
-      "src": "icons/advanced.svg",
+      "src": "ls picons/advanced.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
   ],
-  "start_url": "/spux/image.html",
+  "start_url": "image.html",
   "display": "browser",
   "theme_color": "#B12A34",
   "background_color": "#B12A34"
