@@ -157,12 +157,16 @@
     ]
 
     // init
-    var gun = Gun('wss://melvincarvalho.com:3000/gun')
+    globalThis.defualts.updates = 'wss://melvincarvalho.com:3000/gun'
+    globalThis.defualts.uri = 'https://json.rocks/image/current'
+    globalThis.spux = { ...defaults, ...di.data, ...qs }
+
+    var gun = Gun(spux.updates)
     var user = gun.user()
 
     var username = 'test'
 
-    var uri = 'https://json.rocks/image/current'
+    var uri = spux.uri
     var current
     var current = Math.floor(Math.random() * di.data.length)
 
