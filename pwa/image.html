@@ -157,8 +157,8 @@
     ]
 
     // init
-    globalThis.defualts.updates = 'wss://melvincarvalho.com:3000/gun'
-    globalThis.defualts.uri = 'https://json.rocks/image/current'
+    globalThis.defaults.updates = 'wss://melvincarvalho.com:3000/gun'
+    globalThis.defaults.uri = 'https://json.rocks/image/current'
     globalThis.spux = { ...defaults, ...di.data, ...qs }
 
     var gun = Gun(spux.updates)
