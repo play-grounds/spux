@@ -169,6 +169,7 @@
     var uri = spux.uri
     var current
     var current = Math.floor(Math.random() * di.data.length)
+    var maxItems = 100
 
     // updates
     gun
@@ -178,11 +179,15 @@
         globalThis.data = data
         console.log('data', data)
         if (data && data.match && data.match(/.jpg$/)) {
-          di.data = [{ contentUrl: data }]
+          di.data.push({ contentUrl: data })
         } else {
-          di.data = [JSON.parse(data)]
+          di.data.push(JSON.parse(data))
         }
-        current = Math.floor(Math.random() * di.data.length)
+        current++
+
+        if (di.data && di.data.length > maxItems) {
+          di.data.shift()
+        }
 
         renderAll()
       })
