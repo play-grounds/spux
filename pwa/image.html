@@ -156,9 +156,9 @@
       }
     ]
 
-    // init
-    // var gun = Gun('wss://melvincarvalho.com:3000/gun')
-    // var user = gun.user()
+    init
+    var gun = Gun('wss://melvincarvalho.com:3000/gun')
+    var user = gun.user()
 
     var username = 'test'
 
@@ -166,18 +166,18 @@
     var current
     var current = Math.floor(Math.random() * di.data.length)
 
-    // updates
-    // gun
-    //   .get(username)
-    //   .get(uri)
-    //   .on(data => {
-    //     globalThis.data = data
-    //     console.log('data', data)
-    //     di.data = [JSON.parse(data)]
-    //     current = Math.floor(Math.random() * di.data.length)
+    updates
+    gun
+      .get(username)
+      .get(uri)
+      .on(data => {
+        globalThis.data = data
+        console.log('data', data)
+        di.data = [JSON.parse(data)]
+        current = Math.floor(Math.random() * di.data.length)
 
-    //     renderAll()
-    //   })
+        renderAll()
+      })
 
     // init
     globalThis.spux = { ...defaults, ...di.data, ...qs }
