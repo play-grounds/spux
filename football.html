@@ -82,7 +82,7 @@
   function renderAll () {
     render(
       html`
-        <video class="center" src=${di.data.src}></video>
+        <video class="center"><source src=${di.data.src} /></video>
       `,
       document.body
     )
