@@ -177,7 +177,11 @@
       .on(data => {
         globalThis.data = data
         console.log('data', data)
-        di.data = [JSON.parse(data)]
+        if (data && data.match && data.match(/.jpg$/)) {
+          di.data = [{ contentUrl: data }]
+        } else {
+          di.data = [JSON.parse(data)]
+        }
         current = Math.floor(Math.random() * di.data.length)
 
         renderAll()
