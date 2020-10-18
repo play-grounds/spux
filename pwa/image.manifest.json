@@ -5,7 +5,8 @@
   "icons": [
     {
       "src": "icons/advanced.svg",
-      "sizes": "any",
+      "sizes": "32x32 512x512",
+      "purpose": "any",
       "type": "image/svg+xml"
     }
   ],
