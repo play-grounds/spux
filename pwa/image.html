@@ -178,10 +178,14 @@
       .on(data => {
         globalThis.data = data
         console.log('data', data)
-        if (data && data.match && data.match(/.jpg$/)) {
-          di.data.push({ contentUrl: data })
+        var image = data
+        if (image && image.match && image.match(/.jpg$/)) {
+          if (spux.base) {
+            image = spux.base + image
+          }
+          di.data.push({ contentUrl: image })
         } else {
-          di.data.push(JSON.parse(data))
+          di.data.push(JSON.parse(image))
         }
         current++
 
