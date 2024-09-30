@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bitcoin Block Hex Decoder</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f9;
+      }
+      h1 {
+        text-align: center;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      textarea {
+        width: 100%;
+        height: 150px;
+        margin-bottom: 20px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #fff;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="container"></div>
+
+    <script type="module">
+      import {
+        h,
+        render,
+        Component
+      } from 'https://unpkg.com/preact@10.5.14?module'
+      import htm from 'https://unpkg.com/htm?module'
+
+      const html = htm.bind(h)
+
+      // Helper function to convert hex string to bytes
+      function hexToBytes(hex) {
+        if (hex.length % 2 !== 0) throw new Error('Invalid hex string')
+        const bytes = new Uint8Array(hex.length / 2)
+        for (let i = 0; i < bytes.length; i++) {
+          bytes[i] = parseInt(hex.substr(i * 2, 2), 16)
+        }
+        return bytes
+      }
+
+      // Helper function to decode block hex
+      function decodeBlockHex(hex) {
+        if (!hex || hex.length < 160) return {} // Minimum length check for a block header
+
+        const version = hex.slice(0, 8)
+        const prevBlockHash = hex.slice(8, 72)
+        const merkleRoot = hex.slice(72, 136)
+        const time = hex.slice(136, 144)
+        const bits = hex.slice(144, 152)
+        const nonce = hex.slice(152, 160)
+
+        // Extract transaction data
+        const txData = hex.slice(160)
+
+        return {
+          version: parseInt(
+            version
+              .match(/.{1,2}/g)
+              .reverse()
+              .join(''),
+            16
+          ),
+          previousBlockHash: prevBlockHash
+            .match(/.{1,2}/g)
+            .reverse()
+            .join(''),
+          merkleRoot: merkleRoot
+            .match(/.{1,2}/g)
+            .reverse()
+            .join(''),
+          time: new Date(
+            parseInt(
+              time
+                .match(/.{1,2}/g)
+                .reverse()
+                .join(''),
+              16
+            ) * 1000
+          ).toUTCString(),
+          bits: bits
+            .match(/.{1,2}/g)
+            .reverse()
+            .join(''),
+          nonce: parseInt(
+            nonce
+              .match(/.{1,2}/g)
+              .reverse()
+              .join(''),
+            16
+          ),
+          rawHeader: hex.slice(0, 160),
+          txData: txData // Add transaction data
+        }
+      }
+
+      // Updated function to calculate block hash with double SHA-256
+      async function calculateBlockHash(rawHeader) {
+        const data = hexToBytes(rawHeader)
+        const hashBuffer1 = await crypto.subtle.digest('SHA-256', data)
+        const hashBuffer2 = await crypto.subtle.digest(
+          'SHA-256',
+          new Uint8Array(hashBuffer1)
+        )
+        return Array.from(new Uint8Array(hashBuffer2))
+          .map(b => b.toString(16).padStart(2, '0'))
+          .reverse()
+          .join('')
+      }
+
+      // New function to parse transactions
+      // Helper function to read VarInt
+      // Helper function to read VarInt
+      function readVarInt(hex, offset) {
+        const firstByte = parseInt(hex.substr(offset, 2), 16)
+        let size = 0
+        let value = 0
+        if (firstByte < 0xfd) {
+          size = 1
+          value = firstByte
+        } else if (firstByte === 0xfd) {
+          size = 3
+          value = parseInt(hex.substr(offset + 2, 4), 16)
+        } else if (firstByte === 0xfe) {
+          size = 5
+          value = parseInt(hex.substr(offset + 2, 8), 16)
+        } else {
+          size = 9
+          value = parseInt(hex.substr(offset + 2, 16), 16)
+        }
+        return { size: size * 2, value }
+      }
+
+      function parseTransactions(txData) {
+        const transactions = []
+        let offset = 0
+
+        // Read transaction count
+        const txCountVarInt = readVarInt(txData, offset)
+        offset += txCountVarInt.size
+        const txCount = txCountVarInt.value
+
+        for (let i = 0; i < txCount; i++) {
+          const startOffset = offset
+          const { txHex, newOffset } = parseTransaction(txData, offset)
+          transactions.push(txHex)
+          offset = newOffset
+        }
+
+        return transactions
+      }
+
+      function parseTransaction(txData, offset) {
+        const startOffset = offset
+
+        // Parse version
+        const version = txData.substr(offset, 8)
+        offset += 8
+
+        // Check for SegWit marker and flag
+        let hasWitness = false
+        const marker = txData.substr(offset, 2)
+        const flag = txData.substr(offset + 2, 2)
+        if (marker === '00' && flag === '01') {
+          hasWitness = true
+          offset += 4 // Skip marker and flag
+        }
+
+        // Record the offset after version and possible marker/flag
+        const baseTxStart = startOffset
+        const baseTxOffset = offset
+
+        // Parse inputs
+        const vinVarInt = readVarInt(txData, offset)
+        const vinCount = vinVarInt.value
+        offset += vinVarInt.size
+
+        for (let i = 0; i < vinCount; i++) {
+          // Previous Transaction Hash
+          offset += 64
+          // Previous Transaction Index
+          offset += 8
+          // Script Length
+          const scriptLengthVarInt = readVarInt(txData, offset)
+          const scriptLength = scriptLengthVarInt.value
+          offset += scriptLengthVarInt.size
+          // Script
+          offset += scriptLength * 2
+          // Sequence
+          offset += 8
+        }
+
+        // Parse outputs
+        const voutVarInt = readVarInt(txData, offset)
+        const voutCount = voutVarInt.value
+        offset += voutVarInt.size
+
+        for (let i = 0; i < voutCount; i++) {
+          // Value
+          offset += 16
+          // Script Length
+          const scriptLengthVarInt = readVarInt(txData, offset)
+          const scriptLength = scriptLengthVarInt.value
+          offset += scriptLengthVarInt.size
+          // Script
+          offset += scriptLength * 2
+        }
+
+        // Record the offset before witness data
+        const noWitnessOffset = offset
+
+        // Parse witness data if present
+        if (hasWitness) {
+          for (let i = 0; i < vinCount; i++) {
+            const witnessCountVarInt = readVarInt(txData, offset)
+            const witnessCount = witnessCountVarInt.value
+            offset += witnessCountVarInt.size
+            for (let j = 0; j < witnessCount; j++) {
+              const witnessLengthVarInt = readVarInt(txData, offset)
+              const witnessLength = witnessLengthVarInt.value
+              offset += witnessLengthVarInt.size
+              offset += witnessLength * 2
+            }
+          }
+        }
+
+        // Lock Time
+        const lockTime = txData.substr(offset, 8)
+        offset += 8
+
+        // For txid calculation, exclude marker, flag, and witness data
+        let txHexForTxid
+        if (hasWitness) {
+          // Exclude marker and flag
+          txHexForTxid =
+            txData.substring(startOffset, startOffset + 8) + // version
+            txData.substring(baseTxOffset, noWitnessOffset) + // inputs and outputs
+            lockTime // lock_time
+        } else {
+          // Non-SegWit transaction
+          txHexForTxid = txData.substring(startOffset, offset)
+        }
+
+        // Update the offset to the end of the transaction
+        const newOffset = offset
+
+        return { txHex: txHexForTxid, newOffset }
+      }
+
+      // Updated function to calculate Merkle root
+      async function calculateMerkleRoot(transactions) {
+        if (transactions.length === 0) return ''
+
+        let hashes = await Promise.all(
+          transactions.map(async tx => {
+            const data = hexToBytes(tx)
+            const hashBuffer1 = await crypto.subtle.digest('SHA-256', data)
+            const hashBuffer2 = await crypto.subtle.digest(
+              'SHA-256',
+              new Uint8Array(hashBuffer1)
+            )
+            return new Uint8Array(hashBuffer2)
+          })
+        )
+
+        while (hashes.length > 1) {
+          const newHashes = []
+          for (let i = 0; i < hashes.length; i += 2) {
+            const left = hashes[i]
+            const right = i + 1 < hashes.length ? hashes[i + 1] : left
+            const combined = new Uint8Array([...left, ...right])
+            const hashBuffer1 = await crypto.subtle.digest('SHA-256', combined)
+            const hashBuffer2 = await crypto.subtle.digest(
+              'SHA-256',
+              new Uint8Array(hashBuffer1)
+            )
+            newHashes.push(new Uint8Array(hashBuffer2))
+          }
+          hashes = newHashes
+        }
+
+        return Array.from(hashes[0])
+          .map(b => b.toString(16).padStart(2, '0'))
+          .reverse()
+          .join('')
+      }
+
+      // Main App Component
+      class App extends Component {
+        constructor() {
+          super()
+          this.state = {
+            blockHex: '',
+            decodedBlock: {},
+            blockHash: '',
+            calculatedMerkleRoot: ''
+          }
+        }
+
+        handleKeyUp = async e => {
+          const hexInput = e.target.value.trim()
+          const decodedBlock = decodeBlockHex(hexInput)
+          let blockHash = ''
+          let calculatedMerkleRoot = ''
+          if (decodedBlock.rawHeader) {
+            blockHash = await calculateBlockHash(decodedBlock.rawHeader)
+            const transactions = parseTransactions(decodedBlock.txData)
+            calculatedMerkleRoot = await calculateMerkleRoot(transactions)
+          }
+          this.setState({
+            blockHex: hexInput,
+            decodedBlock,
+            blockHash,
+            calculatedMerkleRoot
+          })
+        }
+
+        render(_, { decodedBlock, blockHash, calculatedMerkleRoot }) {
+          return html`
+            <div>
+              <h1>Bitcoin Block Hex Decoder</h1>
+              <textarea
+                placeholder="Paste Bitcoin block hex here..."
+                onKeyUp=${this.handleKeyUp}
+              ></textarea>
+
+              ${Object.keys(decodedBlock).length > 0 &&
+              html`
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Field</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Version</td>
+                      <td>${decodedBlock.version}</td>
+                    </tr>
+                    <tr>
+                      <td>Previous Block Hash</td>
+                      <td>${decodedBlock.previousBlockHash}</td>
+                    </tr>
+                    <tr>
+                      <td>Merkle Root</td>
+                      <td>${decodedBlock.merkleRoot}</td>
+                    </tr>
+                    <tr>
+                      <td>Timestamp</td>
+                      <td>${decodedBlock.time}</td>
+                    </tr>
+                    <tr>
+                      <td>Bits</td>
+                      <td>${decodedBlock.bits}</td>
+                    </tr>
+                    <tr>
+                      <td>Nonce</td>
+                      <td>${decodedBlock.nonce}</td>
+                    </tr>
+                    <tr>
+                      <td>Block Hash</td>
+                      <td>${blockHash}</td>
+                    </tr>
+                    <tr>
+                      <td>Transaction Data</td>
+                      <td>
+                        <textarea
+                          readonly
+                          style="width: 100%; height: 200px; max-width: 500px;"
+                        >
+${decodedBlock.txData || ''}</textarea
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Merkle Root (from header)</td>
+                      <td>${decodedBlock.merkleRoot}</td>
+                    </tr>
+                    <tr>
+                      <td>Calculated Merkle Root</td>
+                      <td>${calculatedMerkleRoot}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              `}
+            </div>
+          `
+        }
+      }
+
+      render(html`<${App} />`, document.getElementById('app'))
+    </script>
+  </body>
+</html>
+

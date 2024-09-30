@@ -10,7 +10,11 @@
 ></script>
 <script type="module">
   var id = 'data'
-  import Grid from 'https://jspm.dev/gridjs'
+  import {
+        Grid,
+        html
+    } from "https://unpkg.com/gridjs?module";
+
   ;(() => {
     globalThis.qs = Object.fromEntries(
       new URLSearchParams(document.location.search)
